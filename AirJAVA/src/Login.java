@@ -366,6 +366,17 @@ public class Login extends JDialog {
 		signinPnl.add(inputUpwdChkPnl);
 		signinPnl.add(inputWarning2Pnl);
 		
+		JPanel uidPnl = new JPanel();
+		JLabel uidLbl = new JLabel("아이디");
+		uidLbl.setPreferredSize(new Dimension(65,12));
+		uidLbl.setHorizontalAlignment(JLabel.CENTER);
+		JTextField uidTf = new JTextField(8);
+		JPanel upwdPnl = new JPanel();
+		JLabel upwdLbl = new JLabel("비밀번호");
+		upwdLbl.setPreferredSize(new Dimension(65,12));
+		upwdLbl.setHorizontalAlignment(JLabel.CENTER);
+		JPasswordField upwdPf = new JPasswordField(8);
+
 		JPanel returnBtnPnl = new JPanel();
 		JButton returnBtn = new JButton("가입하기");
 		returnBtn.addActionListener(new ActionListener() {
@@ -391,7 +402,8 @@ public class Login extends JDialog {
 					inputWarning2Lbl2.setText("비밀번호가 같지 않습니다");
 					inputWarning2Lbl2.setForeground(Color.red);
 					
-					
+					uidTf.setText("");
+					upwdPf.setText("");
 					card.show(cardPnl, "로그인");
 					setSize(280, 250);
 				}
@@ -416,6 +428,8 @@ public class Login extends JDialog {
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				uidTf.setText("");
+				upwdPf.setText("");
 				card.show(cardPnl, "로그인");
 				setSize(280, 250);
 			}
@@ -438,20 +452,10 @@ public class Login extends JDialog {
 		logoPnl.add(logoLbl);
 		loginPnl.add(logoPnl);
 
-		JPanel uidPnl = new JPanel();
-		JLabel uidLbl = new JLabel("아이디");
-		uidLbl.setPreferredSize(new Dimension(65,12));
-		uidLbl.setHorizontalAlignment(JLabel.CENTER);
-		JTextField uidTf = new JTextField(8);
 		uidPnl.add(uidLbl);
 		uidPnl.add(uidTf);
 		loginPnl.add(uidPnl);
 
-		JPanel upwdPnl = new JPanel();
-		JLabel upwdLbl = new JLabel("비밀번호");
-		upwdLbl.setPreferredSize(new Dimension(65,12));
-		upwdLbl.setHorizontalAlignment(JLabel.CENTER);
-		JPasswordField upwdPf = new JPasswordField(8);
 		upwdPnl.add(upwdLbl);
 		upwdPnl.add(upwdPf);
 		loginPnl.add(upwdPnl);
