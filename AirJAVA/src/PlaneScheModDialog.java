@@ -8,19 +8,21 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-public class planeScheModDialog extends JDialog {
+public class PlaneScheModDialog extends JDialog {
 	JPanel mainPnl;
 	JPanel titleLblPnl;
 	JLabel titleLbl;
 	JButton addSchdBtn;
+	Plane plane;
 
-	public planeScheModDialog(Plane plane) {
+	public PlaneScheModDialog(Plane plane) {
+		this.plane = plane;
 		plane.schedules = new ArrayList<PlaneSchedule>();
 		PlaneSchedule tempSchdPlane = new PlaneSchedule();
 		tempSchdPlane.arrvPlace = "제주";
 		tempSchdPlane.deptDate = "21.07.25";
 		tempSchdPlane.deptPlace = "부산";
-		tempSchdPlane.deptTime = "06:10";
+		tempSchdPlane.deptTime = "06:00";
 		tempSchdPlane.seatV = plane.seatV;
 		tempSchdPlane.seatG = plane.seatG;
 		tempSchdPlane.seatS = plane.seatS;
@@ -31,7 +33,7 @@ public class planeScheModDialog extends JDialog {
 
 		titleLblPnl = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		titleLbl = new JLabel("   " + plane.planeName + " 편 스케쥴 목록");
-		titleLbl.setPreferredSize(new Dimension(850, 80));
+		titleLbl.setPreferredSize(new Dimension(850, 45));
 		titleLbl.setHorizontalAlignment(JLabel.LEFT);
 		titleLbl.setFont(new Font(titleLbl.getFont().getName(), Font.PLAIN, 25));
 		titleLblPnl.add(titleLbl);
@@ -39,7 +41,7 @@ public class planeScheModDialog extends JDialog {
 		addSchdBtn = new JButton("스케쥴 추가");
 		addSchdBtn.addActionListener(new mySchdAddActionListener());
 		addSchdBtn.setFont(new Font(addSchdBtn.getFont().getName(), Font.PLAIN, 20));
-		addSchdBtn.setPreferredSize(new Dimension(160, 80));
+		addSchdBtn.setPreferredSize(new Dimension(160, 45));
 		titleLblPnl.add(addSchdBtn);
 		mainPnl.add(titleLblPnl);
 
@@ -49,7 +51,7 @@ public class planeScheModDialog extends JDialog {
 
 		setTitle(plane.planeName);
 		setModal(true);
-		setLocation(530, 350);
+		setLocation(400, 350);
 		pack();
 		setVisible(true);
 	}
@@ -112,7 +114,7 @@ public class planeScheModDialog extends JDialog {
 	class mySchdAddActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			new PlaneScheAddDialog(plane, -1);
 		}
 	}
 }

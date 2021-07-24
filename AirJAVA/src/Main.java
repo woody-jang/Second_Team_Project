@@ -24,6 +24,8 @@ public class Main extends JFrame {
 	List<JButton> planeBtnList;
 	JPanel planeSchModPnl;
 	JScrollPane scrlPlaneManPnl;
+	CardLayout card;
+	JPanel cardPnl;
 
 	public Main() {
 		if (CustomerIO.CUSTOMER_LIST.exists())
@@ -39,14 +41,23 @@ public class Main extends JFrame {
 		addAdmin();
 //		addPlane();
 
-		CardLayout card = new CardLayout();
-		JPanel cardPnl = new JPanel(card);
+		card = new CardLayout();
+		cardPnl = new JPanel(card);
 
 		addAdminTabPane();
+		JPanel adminTotalPnl = new JPanel();
+		adminTotalPnl.setLayout(new BoxLayout(adminTotalPnl, BoxLayout.Y_AXIS));
+		JPanel cancelBtnPnl = new JPanel();
+		JButton cancelBtn = new JButton("끝내기");
+		cancelBtn.addActionListener(new myCancelBtnActionLis());
+		cancelBtn.setFont(new Font(cancelBtn.getFont().getName(), Font.PLAIN, 20));
+		cancelBtnPnl.add(cancelBtn);
+		adminTotalPnl.add(adminTabPane);
+		adminTotalPnl.add(cancelBtnPnl);
 
 		JPanel mainPnl = addMainPnl(card, cardPnl);
 
-		cardPnl.add(adminTabPane, "관리자");
+		cardPnl.add(adminTotalPnl, "관리자");
 		cardPnl.add(mainPnl, "메인");
 
 		add(cardPnl);
@@ -93,6 +104,7 @@ public class Main extends JFrame {
 		adminTabPane.add(scheduleManPnl, "스케쥴 관리");
 		adminTabPane.add(customerManPnl, "회원 관리");
 		adminTabPane.add(reserveManPnl, "예약 관리");
+		
 	}
 
 	private void addReserveManPnl() {
@@ -140,7 +152,7 @@ public class Main extends JFrame {
 						if (planeBtnList.get(j).equals(tempBtn))
 							break;
 					}
-					new planeScheModDialog(planes.get(j));
+					new PlaneScheModDialog(planes.get(j));
 				}
 			});
 		}
@@ -367,6 +379,17 @@ public class Main extends JFrame {
 
 	public static void main(String[] args) {
 		new Main();
+		new Calendar();
 	}
 
+	class myCancelBtnActionLis implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			int choice = JOptionPane.showConfirmDialog(null, "로그아웃 하시겠습니까?", "관리자모드 종료",
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (choice == 0) {
+				card.show(cardPnl, "메인");
+			}
+		}
+	}
 }
