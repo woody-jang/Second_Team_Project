@@ -52,12 +52,21 @@ public class Calendar extends JDialog {
 		calPnl.add(addDayLbl());
 		mainPnl.add(calPnl);
 
-		JPanel cancelBtnPnl = new JPanel();
-		JButton cancelBtn = new JButton("취소");
+		JPanel btnPnl = new JPanel();
+		JButton okBtn = new JButton("확 인");
+		okBtn.setFont(new Font(okBtn.getFont().getName(), Font.PLAIN, 20));
+		okBtn.setPreferredSize(new Dimension(100, 30));
+		okBtn.setMargin(new Insets(0, 5, 0, 5));
+		btnPnl.add(okBtn);
+		
+		JLabel blankLbl = new JLabel("   ");
+		JButton cancelBtn = new JButton("취 소");
 		cancelBtn.setFont(new Font(cancelBtn.getFont().getName(), Font.PLAIN, 20));
+		cancelBtn.setPreferredSize(new Dimension(100, 30));
 		cancelBtn.setMargin(new Insets(0, 5, 0, 5));
-		cancelBtnPnl.add(cancelBtn);
-		mainPnl.add(cancelBtnPnl);
+		btnPnl.add(blankLbl);
+		btnPnl.add(cancelBtn);
+		mainPnl.add(btnPnl);
 
 		lastMonthBtn.addActionListener(new ActionListener() {
 			@Override
@@ -100,6 +109,29 @@ public class Calendar extends JDialog {
 				repaint();
 				revalidate();
 				pack();
+			}
+		});
+		
+		okBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LocalDate selected = null;
+				if (!selectedDate.equals("None")) {
+					selected = LocalDate.of(selectedYear, selectedMonth, selectedDay);
+				}
+				if (selectedDate.equals("None")) {
+					JOptionPane.showMessageDialog(null, "날짜를 선택하세요", "날짜 선택", JOptionPane.ERROR_MESSAGE);
+				}
+				else if (selected.getDayOfYear() < LocalDate.now().getDayOfYear() || selectedYear < LocalDate.now().getYear()) {
+					JOptionPane.showMessageDialog(null, "오늘 이후를 선택하세요", "날짜 선택", JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					int choice = JOptionPane.showConfirmDialog(null, "선택하신 날짜는 " + selectedDate + "입니다\n확인 버튼을 누르세요",
+							"선택 완료", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					if (choice == 0) {
+						dispose();
+					}
+				}
 			}
 		});
 		
@@ -183,8 +215,8 @@ public class Calendar extends JDialog {
 							selectedYear = today.getYear();
 							selectedMonth = today.getMonthValue();
 							selectedDay = i + 1;
-							sb.append(today.getYear() + ".");
-							sb.append(today.getMonthValue() + ".");
+							sb.append(selectedYear % 100 + ".");
+							sb.append(selectedMonth + ".");
 							sb.append(String.valueOf(i + 1));
 							selectedDate = sb.toString();
 						} else {

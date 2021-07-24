@@ -47,6 +47,27 @@ public class PlaneScheModDialog extends JDialog {
 
 		addPlaSchds(plane);
 		
+		JPanel btnPnl = new JPanel();
+		JButton okBtn = new JButton("확 인");
+		okBtn.setFont(new Font(okBtn.getFont().getName(), Font.PLAIN, 20));
+		okBtn.setPreferredSize(new Dimension(100, 30));
+		btnPnl.add(okBtn);
+		
+		JLabel blankLbl = new JLabel("   ");
+		JButton cancelBtn = new JButton("취 소");
+		cancelBtn.setFont(new Font(cancelBtn.getFont().getName(), Font.PLAIN, 20));
+		cancelBtn.setPreferredSize(new Dimension(100, 30));
+		btnPnl.add(blankLbl);
+		btnPnl.add(cancelBtn);
+		mainPnl.add(btnPnl);
+		
+		cancelBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
 		add(mainPnl);
 
 		setTitle(plane.planeName);

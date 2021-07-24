@@ -57,15 +57,15 @@ public class Main extends JFrame {
 
 		JPanel mainPnl = addMainPnl(card, cardPnl);
 
-		cardPnl.add(adminTotalPnl, "관리자");
 		cardPnl.add(mainPnl, "메인");
+		cardPnl.add(adminTotalPnl, "관리자");
 
 		add(cardPnl);
 
 		setTitle("Hello World :-)");
 		setLocation(450, 300);
-//		setSize(840, 500);
-		pack();
+		setSize(840, 500);
+//		pack();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 	}
@@ -379,7 +379,7 @@ public class Main extends JFrame {
 
 	public static void main(String[] args) {
 		new Main();
-		new Calendar();
+//		new Calendar();
 	}
 
 	class myCancelBtnActionLis implements ActionListener {

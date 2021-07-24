@@ -58,7 +58,7 @@ public class PlaneScheAddDialog extends JDialog {
 		
 		JComboBox<String> deptTimeComb = new JComboBox<String>(deptTimeList);
 		deptTimeComb.setFont(new Font(deptTimeComb.getFont().getName(), Font.PLAIN, 20));
-		deptTimeComb.setPreferredSize(new Dimension(70, 30));
+		deptTimeComb.setPreferredSize(new Dimension(80, 30));
 		informPnl.add(deptTimeComb);
 		
 		JPanel btnPnl = new JPanel();
@@ -68,29 +68,46 @@ public class PlaneScheAddDialog extends JDialog {
 		btnPnl.add(okBtn);
 		
 		JLabel blankLbl = new JLabel("   ");
-		JButton calcelBtn = new JButton("취 소");
-		calcelBtn.setFont(new Font(calcelBtn.getFont().getName(), Font.PLAIN, 20));
-		calcelBtn.setPreferredSize(new Dimension(100, 30));
+		JButton cancelBtn = new JButton("취 소");
+		cancelBtn.setFont(new Font(cancelBtn.getFont().getName(), Font.PLAIN, 20));
+		cancelBtn.setPreferredSize(new Dimension(100, 30));
 		btnPnl.add(blankLbl);
-		btnPnl.add(calcelBtn);
+		btnPnl.add(cancelBtn);
 		
 		deptPlaceComb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<String> tempComb = (JComboBox<String>) e.getSource();
 				int selectedIdx = tempComb.getSelectedIndex();
-				deptTimeComb.removeAllItems();
+				arrvPlaceComb.removeAllItems();
 				for (int i = 0; i < airportPlaceArrv.length; i++) {
 					if (selectedIdx == 0) {
-						deptTimeComb.addItem(airportPlaceArrv[i]);
+						arrvPlaceComb.addItem(airportPlaceArrv[i]);
 					}
 					else if (selectedIdx != i) {
-						deptTimeComb.addItem(airportPlaceArrv[i]);
+						arrvPlaceComb.addItem(airportPlaceArrv[i]);
 					}
 				}
 			}
 		});
 
+		scheDateBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Calendar();
+				if (!Calendar.selectedDate.equals("None")) {
+					scheDateBtn.setText(Calendar.selectedDate);
+				}
+			}
+		});
+		
+		cancelBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
 		mainPnl.add(informPnl);
 		mainPnl.add(btnPnl);
 
