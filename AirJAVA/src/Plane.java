@@ -16,7 +16,6 @@ public class Plane implements Serializable{
 	//seatD[0].add(new JButton("D1")) => 1구역에 D등급의 좌석1개 추가
 	//seatS[0] == null
 	List<PlaneSchedule> schedules = new ArrayList<PlaneSchedule>(); //현 비행기의 스케쥴정보
-	PlaneAddDialog plaAddDia;
 	
 	public int getCntOfSeatV() {
 		int count = 0;

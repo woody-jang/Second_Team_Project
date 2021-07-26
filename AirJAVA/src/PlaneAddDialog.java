@@ -45,7 +45,7 @@ public class PlaneAddDialog extends JDialog {
 		planeName1 = new JLabel();
 		planeName2 = new JLabel();
 		planeName3 = new JLabel();
-		
+
 		planeName1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -54,20 +54,18 @@ public class PlaneAddDialog extends JDialog {
 					radioSection1.setEnabled(true);
 					radioSection2.setEnabled(true);
 					radioSection3.setEnabled(true);
-					planeName1.setText(planeModel);
-					int count = 0;
-					char last = 64;
+					planeName1.setText(planeModel); // A
+					char last = 65;
 					for (int i = 0; i < Main.planes.size(); i++) {
 						char tmpName = Main.planes.get(i).planeName.charAt(0);
-						if (planeModel.equals(String.valueOf(tmpName))) {
-							if (last + 1 == Main.planes.get(i).planeName.charAt(1)) {
-								count++;
+						if (planeModel.equals(String.valueOf(tmpName))) { // 기종이 같고
+							if (last == Main.planes.get(i).planeName.charAt(1)) { // 두번째 글자가 같다면
 								last++;
 							} else
 								break;
 						}
 					}
-					char tempModel = (char) (count + 65);
+					char tempModel = (char) last;
 					planeName2.setText(String.valueOf(tempModel));
 				}
 			}
@@ -75,12 +73,12 @@ public class PlaneAddDialog extends JDialog {
 		mainPnl.add(planeNamePnl);
 		planeName4 = new JLabel();
 		planeName5 = new JLabel();
-		setNameLblDefault(planeName1);
-		setNameLblDefault(planeName2);
-		setNameLblDefault(planeName3);
-		setNameLblDefault(planeName4);
-		setNameLblDefault(planeName5);
-		
+		setNameLblDefault(planeName1, 0);
+		setNameLblDefault(planeName2, 1);
+		setNameLblDefault(planeName3, 2);
+		setNameLblDefault(planeName4, 3);
+		setNameLblDefault(planeName5, 4);
+
 		JPanel radioBtnPnl = new JPanel();
 		radioSection1 = new JRadioButton("1구역");
 		radioSection2 = new JRadioButton("2구역");
@@ -100,7 +98,7 @@ public class PlaneAddDialog extends JDialog {
 		radioBtnPnl.add(radioSection2);
 		radioBtnPnl.add(radioSection3);
 		mainPnl.add(radioBtnPnl);
-		
+
 		String[] seatCnt = { "선택", "2", "4", "6" };
 		JPanel comboPnl = new JPanel();
 		JLabel vLbl = new JLabel(" V좌석");
@@ -111,7 +109,7 @@ public class PlaneAddDialog extends JDialog {
 
 		JLabel sLbl = new JLabel(" S좌석");
 		sComb = new JComboBox<String>(seatCnt);
-		
+
 		vLbl.setPreferredSize(new Dimension(50, 20));
 		vLbl.setFont(new Font(vLbl.getFont().getName(), Font.PLAIN, 15));
 		vComb.setEnabled(false);
@@ -120,13 +118,13 @@ public class PlaneAddDialog extends JDialog {
 		sComb.addActionListener(new myCombBoxActionListener());
 		comboPnl.add(vLbl);
 		comboPnl.add(vComb);
-		
+
 		gLbl.setPreferredSize(new Dimension(50, 20));
 		gLbl.setFont(new Font(gLbl.getFont().getName(), Font.PLAIN, 15));
 		gComb.setEnabled(false);
 		comboPnl.add(gLbl);
 		comboPnl.add(gComb);
-		
+
 		sLbl.setPreferredSize(new Dimension(50, 20));
 		sLbl.setFont(new Font(sLbl.getFont().getName(), Font.PLAIN, 15));
 		sComb.setEnabled(false);
@@ -142,7 +140,6 @@ public class PlaneAddDialog extends JDialog {
 		seatPos3 = new JPanel();
 		seatPos3.setLayout(new BoxLayout(seatPos3, BoxLayout.Y_AXIS));
 
-
 		seatPos1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "1구역",
 				TitledBorder.CENTER, TitledBorder.TOP));
 		seatPos2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "2구역",
@@ -157,8 +154,10 @@ public class PlaneAddDialog extends JDialog {
 		seatPosPnl.add(seatPos3);
 		mainPnl.add(seatPosPnl);
 
+		setSeatPosPnl();
+
 		JPanel okCanBtnPnl = new JPanel();
-		JButton okBtn = new JButton("추가하기");
+		JButton okBtn = new JButton("확인");
 		okBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -199,7 +198,43 @@ public class PlaneAddDialog extends JDialog {
 
 		add(mainPnl);
 
-		setTitle("비행기 추가");
+		showGUI();
+	}
+
+	private void setSeatPosPnl() {
+		for (int i = 0; i < 3; i++) {
+			if (tempPla.seatV[i] != null) {
+				setSeatPosLbl(tempPla.seatV[i], "V", i);
+			} else if (tempPla.seatG[i] != null) {
+				setSeatPosLbl(tempPla.seatG[i], "G", i);
+			} else if (tempPla.seatS[i] != null) {
+				setSeatPosLbl(tempPla.seatS[i], "S", i);
+			}
+		}
+	}
+
+	private void setSeatPosLbl(List<JButton> seat, String seatGrade, int idx) {
+		for (int i = 0; i < 2; i++) {
+			JPanel tempPnl = new JPanel();
+			for (int j = 0; j < seat.size() / 2; j++) {
+				int temp = (i * 2) + (j * 2) + 1;
+				JLabel tempLbl1 = new JLabel(seatGrade + " 0" + temp);
+				tempLbl1.setPreferredSize(new Dimension(40, 50));
+				tempLbl1.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+				tempLbl1.setHorizontalAlignment(JLabel.CENTER);
+				tempPnl.add(tempLbl1);
+			}
+			if (idx == 0)
+				seatPos1.add(tempPnl);
+			else if (idx == 1)
+				seatPos2.add(tempPnl);
+			else if (idx == 2)
+				seatPos3.add(tempPnl);
+		}
+	}
+
+	void showGUI() {
+		setTitle("비행기 추가 / 수정");
 		setModal(true);
 //		setSize(300, 300);
 		pack();
@@ -211,16 +246,21 @@ public class PlaneAddDialog extends JDialog {
 		radioSection1.setFont(new Font(radioSection1.getFont().getName(), Font.PLAIN, 20));
 		radioSection2.setFont(new Font(radioSection2.getFont().getName(), Font.PLAIN, 20));
 		radioSection3.setFont(new Font(radioSection3.getFont().getName(), Font.PLAIN, 20));
-		radioSection1.setEnabled(false);
-		radioSection2.setEnabled(false);
-		radioSection3.setEnabled(false);
+		if (tempPla.planeName == null) {
+			radioSection1.setEnabled(false);
+			radioSection2.setEnabled(false);
+			radioSection3.setEnabled(false);
+		}
 	}
 
-	private void setNameLblDefault(JLabel planeNameLbl) {
+	private void setNameLblDefault(JLabel planeNameLbl, int idx) {
 		planeNameLbl.setPreferredSize(new Dimension(80, 80));
 		planeNameLbl.setFont(new Font(planeNameLbl.getFont().getName(), Font.PLAIN, 35));
 		planeNameLbl.setHorizontalAlignment(JLabel.CENTER);
 		planeNameLbl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		if (tempPla.planeName != null) {
+			planeNameLbl.setText(tempPla.planeName.substring(idx, idx + 1));
+		}
 		planeNamePnl.add(planeNameLbl);
 	}
 

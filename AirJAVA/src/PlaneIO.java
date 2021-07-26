@@ -6,9 +6,9 @@ public class PlaneIO {
 	
 	private PlaneIO() {}
 	
-	static void save(List<Plane> customers) {
+	static void save(List<Plane> planes) {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PLANE_LIST))) {
-			oos.writeObject(customers);
+			oos.writeObject(planes);
 			oos.flush();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

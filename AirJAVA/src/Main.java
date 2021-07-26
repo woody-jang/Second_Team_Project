@@ -14,6 +14,7 @@ public class Main extends JFrame {
 	static List<Plane> planes;
 	static int checkAdmin = 0;
 	static int checkAddPlane = 0;
+	static int checkModPlaneSche = 0;
 	List<JPanel> planePnlList;
 	JTabbedPane adminTabPane;
 	JPanel planeManPnl;
@@ -26,6 +27,10 @@ public class Main extends JFrame {
 	JScrollPane scrlPlaneManPnl;
 	CardLayout card;
 	JPanel cardPnl;
+	JPanel planeSchModByDatePnl;
+	Calendar calendar;
+	List<JButton> modBtnList;
+	List<JButton> delBtnList;
 
 	public Main() {
 		if (CustomerIO.CUSTOMER_LIST.exists())
@@ -57,15 +62,15 @@ public class Main extends JFrame {
 
 		JPanel mainPnl = addMainPnl(card, cardPnl);
 
-		cardPnl.add(mainPnl, "메인");
 		cardPnl.add(adminTotalPnl, "관리자");
+		cardPnl.add(mainPnl, "메인");
 
 		add(cardPnl);
 
 		setTitle("Hello World :-)");
 		setLocation(450, 300);
-		setSize(840, 500);
-//		pack();
+//		setSize(840, 500);
+		setSize(1050, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 	}
@@ -104,7 +109,7 @@ public class Main extends JFrame {
 		adminTabPane.add(scheduleManPnl, "스케쥴 관리");
 		adminTabPane.add(customerManPnl, "회원 관리");
 		adminTabPane.add(reserveManPnl, "예약 관리");
-		
+
 	}
 
 	private void addReserveManPnl() {
@@ -118,18 +123,138 @@ public class Main extends JFrame {
 	private void addScheduleManPnl() {
 		scheduleManPnl = new JPanel();
 		JTabbedPane scheduleManTabPane = new JTabbedPane();
-		JScrollPane scrlScheduleManTabPane = new JScrollPane(scheduleManTabPane);
+		scheduleManTabPane.setPreferredSize(new Dimension(1000, 380));
 
 		planeSchModPnl = new JPanel();
+		JScrollPane scrlPlaneSchModPnl = new JScrollPane(planeSchModPnl);
 		planeSchModPnl.setLayout(new BoxLayout(planeSchModPnl, BoxLayout.Y_AXIS));
-		planeSchModPnl.setPreferredSize(new Dimension(900, 350));
 
 		planeBtnList = new ArrayList<JButton>();
 		addPlaneBtns();
 
-		scheduleManTabPane.add(planeSchModPnl, "비행기별");
+		scheduleManTabPane.add(scrlPlaneSchModPnl, "비행기별");
 
-		scheduleManPnl.add(scrlScheduleManTabPane);
+		planeSchModByDatePnl = new JPanel();
+		JScrollPane scrlPlaneSchModByDatePnl = new JScrollPane(planeSchModByDatePnl);
+		planeSchModByDatePnl.setLayout(new BoxLayout(planeSchModByDatePnl, BoxLayout.Y_AXIS));
+
+		scheduleManTabPane.add(scrlPlaneSchModByDatePnl, "날짜별");
+		addPlaneCalPnl();
+
+		scheduleManPnl.add(scheduleManTabPane);
+	}
+
+	private void addPlaneCalPnl() {
+		planeSchModByDatePnl.setLayout(new BoxLayout(planeSchModByDatePnl, BoxLayout.Y_AXIS));
+		calendar = new Calendar(1, "미정");
+		planeSchModByDatePnl.add(calendar.getCalendarPnl());
+		modBtnList = new ArrayList<JButton>();
+		delBtnList = new ArrayList<JButton>();
+		for (int i = 0; i < calendar.dayBtns.size(); i++) {
+			calendar.dayBtns.get(i).addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JPanel schedListMainPnl = new JPanel();
+					schedListMainPnl.setLayout(new BoxLayout(schedListMainPnl, BoxLayout.Y_AXIS));
+
+					JPanel scheAddBtnPnl = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+					JButton addBtn = new JButton("스케쥴 추가");
+					addBtn.setFont(new Font(addBtn.getFont().getName(), Font.PLAIN, 20));
+					addBtn.setPreferredSize(new Dimension(160, 45));
+					scheAddBtnPnl.add(addBtn);
+					schedListMainPnl.add(scheAddBtnPnl);
+
+					JPanel scheLblPnl = new JPanel();
+					List<int[]> schedules = new ArrayList<int[]>();
+					for (int i = 0; i < planes.size(); i++) {
+						if (planes.get(i).schedules.size() != 0) {
+							for (int j = 0; j < planes.get(i).schedules.size(); j++) {
+								String[] date = planes.get(i).schedules.get(j).deptDate.split("[.]");
+								int year = Integer.parseInt(date[0]);
+								int month = Integer.parseInt(date[1]);
+								int day = Integer.parseInt(date[2]);
+								if (calendar.selectedYear == year && calendar.selectedMonth == month
+										&& calendar.selectedDay == day) {
+									schedules.add(new int[] { i, j });
+								}
+							}
+						}
+					}
+					System.out.println(calendar.selectedYear);
+					System.out.println(calendar.selectedMonth);
+					System.out.println(calendar.selectedDay);
+					for (int i = 0; i < schedules.size(); i++) {
+						scheLblPnl.add(addPlaSchds(schedules.get(i)));
+					}
+				}
+			});
+		}
+	}
+
+	private JPanel addPlaSchds(int[] scheds) {
+		JPanel tempSchdPnl = new JPanel();
+		int idx1 = scheds[0];
+		int idx2 = scheds[1];
+		Plane plane = planes.get(idx1);
+		PlaneSchedule tempPlaSchd = plane.schedules.get(idx2);
+		String planeName = plane.planeName;
+		String deptPlace = tempPlaSchd.deptPlace;
+		String arrvPlace = tempPlaSchd.arrvPlace;
+		String deptTime = tempPlaSchd.deptTime;
+		int[] countSeatReserve = new int[3];
+		for (int j = 0; j < 3; j++) {
+			if (tempPlaSchd.getSeatSelectedV[j] != null) {
+				for (int k = 0; k < tempPlaSchd.getSeatSelectedV[j].size(); k++) {
+					if (!tempPlaSchd.getSeatSelectedV[j].get(k))
+						countSeatReserve[0]++;
+				}
+			}
+			if (tempPlaSchd.getSeatSelectedG[j] != null) {
+				for (int k = 0; k < tempPlaSchd.getSeatSelectedG[j].size(); k++) {
+					if (!tempPlaSchd.getSeatSelectedG[j].get(k))
+						countSeatReserve[1]++;
+				}
+			}
+			if (tempPlaSchd.getSeatSelectedS[j] != null) {
+				for (int k = 0; k < tempPlaSchd.getSeatSelectedS[j].size(); k++) {
+					if (!tempPlaSchd.getSeatSelectedS[j].get(k))
+						countSeatReserve[2]++;
+				}
+			}
+		}
+
+		JLabel tempSchdLbl = new JLabel("  " + planeName + ",  " + deptPlace + " → " + arrvPlace + ",  " + deptTime
+				+ ",  예약좌석: " + countSeatReserve[0] + "(V), " + countSeatReserve[1] + "(G), " + countSeatReserve[2] + "(S)");
+		tempSchdLbl.setPreferredSize(new Dimension(700, 80));
+		tempSchdLbl.setHorizontalAlignment(JLabel.LEFT);
+		tempSchdLbl.setFont(new Font(tempSchdLbl.getFont().getName(), Font.PLAIN, 25));
+		tempSchdLbl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		tempSchdPnl.add(tempSchdLbl);
+
+		JButton modBtn = new JButton("수정");
+		modBtn.setFont(new Font(modBtn.getFont().getName(), Font.PLAIN, 20));
+		modBtn.setPreferredSize(new Dimension(80, 80));
+		tempSchdPnl.add(modBtn);
+		modBtnList.add(modBtn);
+
+		modBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+
+		JButton delBtn = new JButton("삭제");
+		delBtn.setFont(new Font(delBtn.getFont().getName(), Font.PLAIN, 20));
+		delBtn.setPreferredSize(new Dimension(80, 80));
+		tempSchdPnl.add(delBtn);
+		delBtnList.add(delBtn);
+
+		delBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		return tempSchdPnl;
 	}
 
 	private void addPlaneBtns() {
@@ -153,6 +278,17 @@ public class Main extends JFrame {
 							break;
 					}
 					new PlaneScheModDialog(planes.get(j));
+					if (checkModPlaneSche == 1) {
+						planeManPnl.removeAll();
+						planeManPnl.add(addBtnPnl);
+						addPlanePnlList();
+						for (int k = 0; k < planePnlList.size(); k++) {
+							planeManPnl.add(planePnlList.get(k));
+						}
+						calendar.repaintCalendar();
+						repaint();
+						revalidate();
+					}
 				}
 			});
 		}
@@ -169,7 +305,7 @@ public class Main extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Plane tempPla = new Plane();
-				tempPla.plaAddDia = new PlaneAddDialog(tempPla);
+				new PlaneAddDialog(tempPla);
 				if (checkAddPlane == 1) {
 					planes.add(tempPla);
 					planeManPnl.removeAll();
@@ -183,11 +319,25 @@ public class Main extends JFrame {
 					tempBtn.setPreferredSize(new Dimension(800, 80));
 					tempBtn.setHorizontalAlignment(JButton.LEFT);
 					tempBtn.setFont(new Font(tempBtn.getFont().getName(), Font.PLAIN, 30));
+					tempBtn.addActionListener(new ActionListener() {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							JButton tempBtn = (JButton) e.getSource();
+							int j = 0;
+							for (; j < planeBtnList.size(); j++) {
+								if (planeBtnList.get(j).equals(tempBtn))
+									break;
+							}
+							new PlaneScheModDialog(planes.get(j));
+						}
+					});
 					planeBtnList.add(tempBtn);
 					tempPnl.add(tempBtn);
 					planeSchModPnl.add(tempPnl);
-					repaint();
 					revalidate();
+					repaint();
+					planeSchModPnl.revalidate();
+					planeSchModPnl.repaint();
 					checkAddPlane = 0;
 					PlaneIO.save(planes);
 				}
@@ -228,7 +378,7 @@ public class Main extends JFrame {
 						if (planePnlList.get(i).getComponent(1).equals(tempBtn))
 							break;
 					}
-					planes.get(i).plaAddDia.show();
+					new PlaneAddDialog(planes.get(i));
 					planeManPnl.removeAll();
 					planeManPnl.add(addBtnPnl);
 					addPlanePnlList();
@@ -379,16 +529,16 @@ public class Main extends JFrame {
 
 	public static void main(String[] args) {
 		new Main();
-//		new Calendar();
 	}
 
 	class myCancelBtnActionLis implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			int choice = JOptionPane.showConfirmDialog(null, "로그아웃 하시겠습니까?", "관리자모드 종료",
-					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+			int choice = JOptionPane.showConfirmDialog(null, "로그아웃 하시겠습니까?", "관리자모드 종료", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE);
 			if (choice == 0) {
 				card.show(cardPnl, "메인");
+				setSize(840, 500);
 			}
 		}
 	}

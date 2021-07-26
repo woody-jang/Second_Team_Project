@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -14,19 +15,22 @@ public class PlaneScheModDialog extends JDialog {
 	JLabel titleLbl;
 	JButton addSchdBtn;
 	Plane plane;
+	JPanel planeSchedPnl;
+	List<JButton> modBtnList;
+	List<JButton> delBtnList;
 
 	public PlaneScheModDialog(Plane plane) {
 		this.plane = plane;
-		plane.schedules = new ArrayList<PlaneSchedule>();
-		PlaneSchedule tempSchdPlane = new PlaneSchedule();
-		tempSchdPlane.arrvPlace = "제주";
-		tempSchdPlane.deptDate = "21.07.25";
-		tempSchdPlane.deptPlace = "부산";
-		tempSchdPlane.deptTime = "06:00";
-		tempSchdPlane.seatV = plane.seatV;
-		tempSchdPlane.seatG = plane.seatG;
-		tempSchdPlane.seatS = plane.seatS;
-		plane.schedules.add(tempSchdPlane);
+//		plane.schedules = new ArrayList<PlaneSchedule>();
+//		PlaneSchedule tempSchdPlane = new PlaneSchedule();
+//		tempSchdPlane.arrvPlace = "제주";
+//		tempSchdPlane.deptDate = "21.07.25";
+//		tempSchdPlane.deptPlace = "부산";
+//		tempSchdPlane.deptTime = "06:00";
+//		tempSchdPlane.seatV = plane.seatV;
+//		tempSchdPlane.seatG = plane.seatG;
+//		tempSchdPlane.seatS = plane.seatS;
+//		plane.schedules.add(tempSchdPlane);
 		
 		mainPnl = new JPanel();
 		mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
@@ -37,21 +41,33 @@ public class PlaneScheModDialog extends JDialog {
 		titleLbl.setHorizontalAlignment(JLabel.LEFT);
 		titleLbl.setFont(new Font(titleLbl.getFont().getName(), Font.PLAIN, 25));
 		titleLblPnl.add(titleLbl);
-
+		
 		addSchdBtn = new JButton("스케쥴 추가");
 		addSchdBtn.addActionListener(new mySchdAddActionListener());
 		addSchdBtn.setFont(new Font(addSchdBtn.getFont().getName(), Font.PLAIN, 20));
 		addSchdBtn.setPreferredSize(new Dimension(160, 45));
 		titleLblPnl.add(addSchdBtn);
 		mainPnl.add(titleLblPnl);
+		
+		planeSchedPnl = new JPanel();
+		planeSchedPnl.setLayout(new BoxLayout(planeSchedPnl, BoxLayout.Y_AXIS));
 
-		addPlaSchds(plane);
+		addPlaSchds();
+		mainPnl.add(planeSchedPnl);
 		
 		JPanel btnPnl = new JPanel();
 		JButton okBtn = new JButton("확 인");
 		okBtn.setFont(new Font(okBtn.getFont().getName(), Font.PLAIN, 20));
 		okBtn.setPreferredSize(new Dimension(100, 30));
 		btnPnl.add(okBtn);
+		okBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PlaneIO.save(Main.planes);
+				Main.checkModPlaneSche = 1;
+				dispose();
+			}
+		});
 		
 		JLabel blankLbl = new JLabel("   ");
 		JButton cancelBtn = new JButton("취 소");
@@ -64,7 +80,10 @@ public class PlaneScheModDialog extends JDialog {
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				int choice = JOptionPane.showConfirmDialog(null, "취소를 누르면 저장이 되지 않습니다!", "저장 불가", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				if (choice == 0) {
+					dispose();
+				}
 			}
 		});
 		
@@ -77,7 +96,9 @@ public class PlaneScheModDialog extends JDialog {
 		setVisible(true);
 	}
 
-	private void addPlaSchds(Plane plane) {
+	private void addPlaSchds() {
+		modBtnList = new ArrayList<JButton>();
+		delBtnList = new ArrayList<JButton>();
 		for (int i = 0; i < plane.schedules.size(); i++) {
 			PlaneSchedule tempPlaSchd = plane.schedules.get(i);
 			
@@ -122,13 +143,47 @@ public class PlaneScheModDialog extends JDialog {
 			modBtn.setFont(new Font(modBtn.getFont().getName(), Font.PLAIN, 20));
 			modBtn.setPreferredSize(new Dimension(80, 80));
 			tempSchdPnl.add(modBtn);
+			modBtnList.add(modBtn);
 
+			modBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int i = 0;
+					for (; i < modBtnList.size(); i++) {
+						if (modBtnList.get(i).equals((JButton) e.getSource())){
+							break;
+						}
+					}
+					new PlaneScheAddDialog(plane, i);
+				}
+			});
+			
 			JButton delBtn = new JButton("삭제");
 			delBtn.setFont(new Font(delBtn.getFont().getName(), Font.PLAIN, 20));
 			delBtn.setPreferredSize(new Dimension(80, 80));
 			tempSchdPnl.add(delBtn);
+			delBtnList.add(delBtn);
 			
-			mainPnl.add(tempSchdPnl);
+			delBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JButton clickedBtn = (JButton) e.getSource();
+					for (int j = 0; j < delBtnList.size(); j++) {
+						if (delBtnList.get(j).equals(clickedBtn)) {
+							int choice = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?\n복구할 수 없습니다", "삭제 확인",
+									JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+							if (choice == 0) {
+								plane.schedules.remove(j);
+								planeSchedPnl.remove(j);
+								planeSchedPnl.repaint();
+								planeSchedPnl.revalidate();
+							}
+						}
+					}
+				}
+			});
+			
+			planeSchedPnl.add(tempSchdPnl);
 		}
 	}
 	
@@ -136,6 +191,11 @@ public class PlaneScheModDialog extends JDialog {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			new PlaneScheAddDialog(plane, -1);
+			planeSchedPnl.removeAll();
+			addPlaSchds();
+			repaint();
+			revalidate();
+			pack();
 		}
 	}
 }

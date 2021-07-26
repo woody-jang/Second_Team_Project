@@ -94,9 +94,36 @@ public class PlaneScheAddDialog extends JDialog {
 		scheDateBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Calendar();
+				new Calendar(0, scheDateBtn.getText());
 				if (!Calendar.selectedDate.equals("None")) {
 					scheDateBtn.setText(Calendar.selectedDate);
+					Calendar.selectedDate = "None";
+				}
+			}
+		});
+		
+		okBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String settedDate = scheDateBtn.getText();
+				String deptPlaceStr = (String) deptPlaceComb.getSelectedItem();
+				String arrvPlaceStr = (String) arrvPlaceComb.getSelectedItem();
+				String deptTimeStr = (String) deptTimeComb.getSelectedItem();
+				if (!(settedDate.equals("미정") || deptPlaceStr.equals("선택") || arrvPlaceStr.equals("선택") || deptTimeStr.equals("선택"))) {
+					for (int i = 0; i < plane.schedules.size(); i++) {
+						if (plane.schedules.get(i).deptDate.equals(settedDate)) {
+							int time1 = Integer.parseInt(plane.schedules.get(i).deptTime.substring(0, 2));
+							int time2 = Integer.parseInt(deptTimeStr.substring(0, 2));
+							if (time1  == time2) {
+								JOptionPane.showMessageDialog(null, "겹치는 스케쥴이 있습니다", "스케쥴 겹침", JOptionPane.ERROR_MESSAGE);
+								return;
+							}
+						}
+					}
+					PlaneSchedule tempSchd = new PlaneSchedule(deptPlaceStr, arrvPlaceStr, settedDate, deptTimeStr,
+							plane.seatV, plane.seatG, plane.seatS);
+					plane.schedules.add(tempSchd);
+					dispose();
 				}
 			}
 		});
@@ -113,6 +140,10 @@ public class PlaneScheAddDialog extends JDialog {
 
 		add(mainPnl);
 
+		showGUI();
+	}
+
+	void showGUI() {
 		setTitle("스케쥴 추가 / 수정");
 		setModal(true);
 		pack();
