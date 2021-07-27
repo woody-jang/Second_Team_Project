@@ -279,6 +279,7 @@ public class Calendar extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					JButton tempPressedBtn = (JButton) e.getSource();
 					tempPressedBtn.setBackground(new Color(101, 255, 94));
+					int idx = dayBtns.indexOf(tempPressedBtn);
 					for (int i = 0; i < dayBtns.size(); i++) {
 						if (tempPressedBtn.equals(dayBtns.get(i))) {
 							StringBuffer sb = new StringBuffer();
@@ -293,6 +294,7 @@ public class Calendar extends JDialog {
 							dayBtns.get(i).setBackground(Color.white);
 						}
 					}
+					Main.main.setPlaneCalAction(idx + 1);
 				}
 			});
 

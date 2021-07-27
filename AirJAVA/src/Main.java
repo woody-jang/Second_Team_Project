@@ -5,6 +5,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.*;
@@ -15,6 +17,7 @@ public class Main extends JFrame {
 	static int checkAdmin = 0;
 	static int checkAddPlane = 0;
 	static int checkModPlaneSche = 0;
+	static Main main;
 	List<JPanel> planePnlList;
 	JTabbedPane adminTabPane;
 	JPanel planeManPnl;
@@ -31,6 +34,8 @@ public class Main extends JFrame {
 	Calendar calendar;
 	List<JButton> modBtnList;
 	List<JButton> delBtnList;
+	int selectedDay;
+	JPanel calPnl;
 
 	public Main() {
 		if (CustomerIO.CUSTOMER_LIST.exists())
@@ -42,7 +47,9 @@ public class Main extends JFrame {
 			planes = PlaneIO.load();
 		else
 			planes = new ArrayList<Plane>();
-
+		
+		sortPlanes();
+		
 		addAdmin();
 //		addPlane();
 
@@ -62,8 +69,8 @@ public class Main extends JFrame {
 
 		JPanel mainPnl = addMainPnl(card, cardPnl);
 
-		cardPnl.add(adminTotalPnl, "관리자");
 		cardPnl.add(mainPnl, "메인");
+		cardPnl.add(adminTotalPnl, "관리자");
 
 		add(cardPnl);
 
@@ -73,6 +80,31 @@ public class Main extends JFrame {
 		setSize(1050, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
+	}
+
+	private void sortPlanes() {
+		if (planes.size() != 0) {
+			Collections.sort(planes, new Comparator<Plane>() {
+				@Override
+				public int compare(Plane o1, Plane o2) {
+					return o1.planeName.compareTo(o2.planeName);
+				}
+			});
+		}
+		
+		for (int i = 0; i < planes.size(); i++) {
+			if (planes.get(i).schedules.size() > 1) {
+				Collections.sort(planes.get(i).schedules, new Comparator<PlaneSchedule>() {
+					@Override
+					public int compare(PlaneSchedule o1, PlaneSchedule o2) {
+						if (o1.deptDate.equals(o2.deptDate)) {
+							return o1.deptTime.compareTo(o2.deptTime);
+						}
+						return o1.deptDate.compareTo(o2.deptDate);
+					}
+				});
+			}
+		}
 	}
 
 	private JPanel addMainPnl(CardLayout card, JPanel cardPnl) {
@@ -100,6 +132,8 @@ public class Main extends JFrame {
 
 	private void addAdminTabPane() {
 		adminTabPane = new JTabbedPane();
+		customerManPnl = new JPanel();
+		JScrollPane scrlCustomerManPnl = new JScrollPane(customerManPnl);
 		addPlaneManPnl();
 		addScheduleManPnl();
 		addCustomerManPnl();
@@ -107,7 +141,7 @@ public class Main extends JFrame {
 
 		adminTabPane.add(scrlPlaneManPnl, "비행기 관리");
 		adminTabPane.add(scheduleManPnl, "스케쥴 관리");
-		adminTabPane.add(customerManPnl, "회원 관리");
+		adminTabPane.add(scrlCustomerManPnl, "회원 관리");
 		adminTabPane.add(reserveManPnl, "예약 관리");
 
 	}
@@ -117,7 +151,55 @@ public class Main extends JFrame {
 	}
 
 	private void addCustomerManPnl() {
-		customerManPnl = new JPanel();
+		customerManPnl.setLayout(new GridLayout(0, 1));
+		String[] cusGrade = { "선택", "실버", "골드", "다이아" };
+		for (int i = 1; i < customers.size(); i++) {
+			JPanel tempPnl = new JPanel();
+			tempPnl.setPreferredSize(new Dimension(800, 45));
+			tempPnl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+			
+			JLabel cusNameLbl = new JLabel("   이름");
+			cusNameLbl.setFont(new Font(cusNameLbl.getFont().getName(), Font.PLAIN, 20));
+			cusNameLbl.setHorizontalAlignment(JLabel.RIGHT);
+			tempPnl.add(cusNameLbl);
+			
+			JTextField cusNameTf = new JTextField(5);
+			cusNameTf.setText(customers.get(i).getName());
+			cusNameTf.setEditable(false);
+			cusNameTf.setFont(new Font(cusNameTf.getFont().getName(), Font.PLAIN, 20));
+			cusNameTf.setHorizontalAlignment(JTextField.CENTER);
+			tempPnl.add(cusNameTf);
+			
+			JLabel cusGradeLbl = new JLabel("   등급");
+			cusGradeLbl.setFont(new Font(cusGradeLbl.getFont().getName(), Font.PLAIN, 20));
+			cusGradeLbl.setHorizontalAlignment(JLabel.RIGHT);
+			tempPnl.add(cusGradeLbl);
+			
+			JComboBox<String> cusGradeComb = new JComboBox<String>(cusGrade);
+			cusGradeComb.setEnabled(false);
+			cusGradeComb.setPreferredSize(new Dimension(90, 30));
+			cusGradeComb.setFont(new Font(cusGradeLbl.getFont().getName(), Font.PLAIN, 20));
+			tempPnl.add(cusGradeComb);
+			
+			JLabel cusMileageLbl = new JLabel("   마일리지");
+			cusMileageLbl.setFont(new Font(cusMileageLbl.getFont().getName(), Font.PLAIN, 20));
+			cusMileageLbl.setHorizontalAlignment(JLabel.RIGHT);
+			tempPnl.add(cusMileageLbl);
+			
+			JTextField cusMileageTf = new JTextField(5);
+			cusMileageTf.setEditable(false);
+			cusMileageTf.setText(String.valueOf(customers.get(i).getPoint()));
+			cusMileageTf.setFont(new Font(cusMileageTf.getFont().getName(), Font.PLAIN, 20));
+			cusMileageTf.setHorizontalAlignment(JTextField.CENTER);
+			tempPnl.add(cusMileageTf);
+			
+			JButton cusModBtn = new JButton("수정");
+			cusModBtn.setPreferredSize(new Dimension(90, 30));
+			cusModBtn.setFont(new Font(cusGradeLbl.getFont().getName(), Font.PLAIN, 20));
+			tempPnl.add(cusModBtn);
+			
+			customerManPnl.add(tempPnl);
+		}
 	}
 
 	private void addScheduleManPnl() {
@@ -147,47 +229,69 @@ public class Main extends JFrame {
 	private void addPlaneCalPnl() {
 		planeSchModByDatePnl.setLayout(new BoxLayout(planeSchModByDatePnl, BoxLayout.Y_AXIS));
 		calendar = new Calendar(1, "미정");
-		planeSchModByDatePnl.add(calendar.getCalendarPnl());
+		calPnl = calendar.getCalendarPnl();
+		planeSchModByDatePnl.add(calPnl);
 		modBtnList = new ArrayList<JButton>();
 		delBtnList = new ArrayList<JButton>();
-		for (int i = 0; i < calendar.dayBtns.size(); i++) {
-			calendar.dayBtns.get(i).addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JPanel schedListMainPnl = new JPanel();
-					schedListMainPnl.setLayout(new BoxLayout(schedListMainPnl, BoxLayout.Y_AXIS));
+	}
+	
+	void setPlaneCalAction(int tempDay) {
+		planeSchModByDatePnl.removeAll();
+		planeSchModByDatePnl.add(calPnl);
+		JPanel schedListMainPnl = new JPanel();
+		schedListMainPnl.setLayout(new BoxLayout(schedListMainPnl, BoxLayout.Y_AXIS));
 
-					JPanel scheAddBtnPnl = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-					JButton addBtn = new JButton("스케쥴 추가");
-					addBtn.setFont(new Font(addBtn.getFont().getName(), Font.PLAIN, 20));
-					addBtn.setPreferredSize(new Dimension(160, 45));
-					scheAddBtnPnl.add(addBtn);
-					schedListMainPnl.add(scheAddBtnPnl);
+		JPanel scheAddBtnPnl = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JButton addBtn = new JButton("스케쥴 추가");
+		addBtn.setFont(new Font(addBtn.getFont().getName(), Font.PLAIN, 20));
+		addBtn.setPreferredSize(new Dimension(160, 45));
+		scheAddBtnPnl.add(addBtn);
+		schedListMainPnl.add(scheAddBtnPnl);
 
-					JPanel scheLblPnl = new JPanel();
-					List<int[]> schedules = new ArrayList<int[]>();
-					for (int i = 0; i < planes.size(); i++) {
-						if (planes.get(i).schedules.size() != 0) {
-							for (int j = 0; j < planes.get(i).schedules.size(); j++) {
-								String[] date = planes.get(i).schedules.get(j).deptDate.split("[.]");
-								int year = Integer.parseInt(date[0]);
-								int month = Integer.parseInt(date[1]);
-								int day = Integer.parseInt(date[2]);
-								if (calendar.selectedYear == year && calendar.selectedMonth == month
-										&& calendar.selectedDay == day) {
-									schedules.add(new int[] { i, j });
-								}
-							}
-						}
-					}
-					System.out.println(calendar.selectedYear);
-					System.out.println(calendar.selectedMonth);
-					System.out.println(calendar.selectedDay);
-					for (int i = 0; i < schedules.size(); i++) {
-						scheLblPnl.add(addPlaSchds(schedules.get(i)));
+		JPanel scheLblPnl = new JPanel();
+		scheLblPnl.setLayout(new BoxLayout(scheLblPnl, BoxLayout.Y_AXIS));
+		selectedDay = tempDay;
+		getscheLblPnl(scheLblPnl);
+		
+		addBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new DayScheAddDialog(calendar.today.getYear() - 2000, calendar.today.getMonthValue(), selectedDay);
+				planeManPnl.removeAll();
+				planeManPnl.add(addBtnPnl);
+				addPlanePnlList();
+				for (int k = 0; k < planePnlList.size(); k++) {
+					planeManPnl.add(planePnlList.get(k));
+				}
+				calendar.repaintCalendar();
+				scheLblPnl.removeAll();
+				getscheLblPnl(scheLblPnl);
+				revalidate();
+				repaint();
+			}
+		});
+		
+		schedListMainPnl.add(scheLblPnl);
+		planeSchModByDatePnl.add(schedListMainPnl);
+	}
+
+	private void getscheLblPnl(JPanel scheLblPnl) {
+		List<int[]> schedules = new ArrayList<int[]>();
+		for (int i = 0; i < planes.size(); i++) {
+			if (planes.get(i).schedules.size() != 0) {
+				for (int j = 0; j < planes.get(i).schedules.size(); j++) {
+					String[] date = planes.get(i).schedules.get(j).deptDate.split("[.]");
+					int year = Integer.parseInt(date[0]) + 2000;
+					int month = Integer.parseInt(date[1]);
+					int day = Integer.parseInt(date[2]);
+					if (calendar.today.getYear() == year && calendar.today.getMonthValue() == month && selectedDay == day) {
+						schedules.add(new int[] { i, j });
 					}
 				}
-			});
+			}
+		}
+		for (int i = 0; i < schedules.size(); i++) {
+			scheLblPnl.add(addPlaSchds(schedules.get(i)));
 		}
 	}
 
@@ -223,9 +327,10 @@ public class Main extends JFrame {
 			}
 		}
 
-		JLabel tempSchdLbl = new JLabel("  " + planeName + ",  " + deptPlace + " → " + arrvPlace + ",  " + deptTime
-				+ ",  예약좌석: " + countSeatReserve[0] + "(V), " + countSeatReserve[1] + "(G), " + countSeatReserve[2] + "(S)");
-		tempSchdLbl.setPreferredSize(new Dimension(700, 80));
+		JLabel tempSchdLbl = new JLabel(
+				"  " + planeName + ",  " + deptPlace + " → " + arrvPlace + ",  " + deptTime + ",  예약좌석: "
+						+ countSeatReserve[0] + "(V), " + countSeatReserve[1] + "(G), " + countSeatReserve[2] + "(S)");
+		tempSchdLbl.setPreferredSize(new Dimension(780, 80));
 		tempSchdLbl.setHorizontalAlignment(JLabel.LEFT);
 		tempSchdLbl.setFont(new Font(tempSchdLbl.getFont().getName(), Font.PLAIN, 25));
 		tempSchdLbl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
@@ -286,8 +391,8 @@ public class Main extends JFrame {
 							planeManPnl.add(planePnlList.get(k));
 						}
 						calendar.repaintCalendar();
-						repaint();
 						revalidate();
+						repaint();
 					}
 				}
 			});
@@ -377,6 +482,10 @@ public class Main extends JFrame {
 					for (; i < planePnlList.size(); i++) {
 						if (planePnlList.get(i).getComponent(1).equals(tempBtn))
 							break;
+					}
+					if (planes.get(i).schedules.size() != 0) {
+						JOptionPane.showMessageDialog(null, "스케쥴이 있어 수정이 불가합니다", "수정 불가", JOptionPane.ERROR_MESSAGE);
+						return;
 					}
 					new PlaneAddDialog(planes.get(i));
 					planeManPnl.removeAll();
@@ -525,10 +634,11 @@ public class Main extends JFrame {
 			admin.setPassword();
 			customers.add(admin);
 		}
+		CustomerIO.save(customers);
 	}
 
 	public static void main(String[] args) {
-		new Main();
+		main = new Main();
 	}
 
 	class myCancelBtnActionLis implements ActionListener {

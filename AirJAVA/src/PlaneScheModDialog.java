@@ -18,6 +18,7 @@ public class PlaneScheModDialog extends JDialog {
 	JPanel planeSchedPnl;
 	List<JButton> modBtnList;
 	List<JButton> delBtnList;
+	int[] countSeatReserves;
 
 	public PlaneScheModDialog(Plane plane) {
 		this.plane = plane;
@@ -31,7 +32,7 @@ public class PlaneScheModDialog extends JDialog {
 //		tempSchdPlane.seatG = plane.seatG;
 //		tempSchdPlane.seatS = plane.seatS;
 //		plane.schedules.add(tempSchdPlane);
-		
+
 		mainPnl = new JPanel();
 		mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
 
@@ -41,20 +42,20 @@ public class PlaneScheModDialog extends JDialog {
 		titleLbl.setHorizontalAlignment(JLabel.LEFT);
 		titleLbl.setFont(new Font(titleLbl.getFont().getName(), Font.PLAIN, 25));
 		titleLblPnl.add(titleLbl);
-		
+
 		addSchdBtn = new JButton("스케쥴 추가");
 		addSchdBtn.addActionListener(new mySchdAddActionListener());
 		addSchdBtn.setFont(new Font(addSchdBtn.getFont().getName(), Font.PLAIN, 20));
 		addSchdBtn.setPreferredSize(new Dimension(160, 45));
 		titleLblPnl.add(addSchdBtn);
 		mainPnl.add(titleLblPnl);
-		
+
 		planeSchedPnl = new JPanel();
 		planeSchedPnl.setLayout(new BoxLayout(planeSchedPnl, BoxLayout.Y_AXIS));
 
 		addPlaSchds();
 		mainPnl.add(planeSchedPnl);
-		
+
 		JPanel btnPnl = new JPanel();
 		JButton okBtn = new JButton("확 인");
 		okBtn.setFont(new Font(okBtn.getFont().getName(), Font.PLAIN, 20));
@@ -68,7 +69,7 @@ public class PlaneScheModDialog extends JDialog {
 				dispose();
 			}
 		});
-		
+
 		JLabel blankLbl = new JLabel("   ");
 		JButton cancelBtn = new JButton("취 소");
 		cancelBtn.setFont(new Font(cancelBtn.getFont().getName(), Font.PLAIN, 20));
@@ -76,17 +77,18 @@ public class PlaneScheModDialog extends JDialog {
 		btnPnl.add(blankLbl);
 		btnPnl.add(cancelBtn);
 		mainPnl.add(btnPnl);
-		
+
 		cancelBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int choice = JOptionPane.showConfirmDialog(null, "취소를 누르면 저장이 되지 않습니다!", "저장 불가", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int choice = JOptionPane.showConfirmDialog(null, "취소를 누르면 저장이 되지 않습니다!", "저장 불가",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				if (choice == 0) {
 					dispose();
 				}
 			}
 		});
-		
+
 		add(mainPnl);
 
 		setTitle(plane.planeName);
@@ -101,44 +103,45 @@ public class PlaneScheModDialog extends JDialog {
 		delBtnList = new ArrayList<JButton>();
 		for (int i = 0; i < plane.schedules.size(); i++) {
 			PlaneSchedule tempPlaSchd = plane.schedules.get(i);
-			
+
 			JPanel tempSchdPnl = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
 			String deptDate = tempPlaSchd.deptDate;
 			String deptPlace = tempPlaSchd.deptPlace;
 			String arrvPlace = tempPlaSchd.arrvPlace;
 			String deptTime = tempPlaSchd.deptTime;
-			int[] countSeatReserve = new int[3];
+			countSeatReserves = new int[3];
 			for (int j = 0; j < 3; j++) {
 				if (tempPlaSchd.getSeatSelectedV[i] != null) {
 					for (int k = 0; k < tempPlaSchd.getSeatSelectedV[i].size(); k++) {
 						if (!tempPlaSchd.getSeatSelectedV[i].get(k))
-							countSeatReserve[0]++;
+							countSeatReserves[0]++;
 					}
 				}
 				if (tempPlaSchd.getSeatSelectedG[i] != null) {
 					for (int k = 0; k < tempPlaSchd.getSeatSelectedG[i].size(); k++) {
 						if (!tempPlaSchd.getSeatSelectedG[i].get(k))
-							countSeatReserve[1]++;
+							countSeatReserves[1]++;
 					}
 				}
 				if (tempPlaSchd.getSeatSelectedS[i] != null) {
 					for (int k = 0; k < tempPlaSchd.getSeatSelectedS[i].size(); k++) {
 						if (!tempPlaSchd.getSeatSelectedS[i].get(k))
-							countSeatReserve[2]++;
+							countSeatReserves[2]++;
 					}
 				}
 			}
-			
-			JLabel tempSchdLbl = new JLabel("  " + deptDate + ",  " + deptTime + ",  " + deptPlace + " → " + arrvPlace + ",  총(예약)좌석: " +
-			plane.getCntOfSeatV() + "(" + countSeatReserve[0] + " V), " + plane.getCntOfSeatG() + "(" + countSeatReserve[1] + " G), " +
-			plane.getCntOfSeatS() + "(" + countSeatReserve[2] + " S)");
+
+			JLabel tempSchdLbl = new JLabel("  " + deptDate + ",  " + deptTime + ",  " + deptPlace + " → " + arrvPlace
+					+ ",  총(예약)좌석: " + plane.getCntOfSeatV() + "(" + countSeatReserves[0] + " V), "
+					+ plane.getCntOfSeatG() + "(" + countSeatReserves[1] + " G), " + plane.getCntOfSeatS() + "("
+					+ countSeatReserves[2] + " S)");
 			tempSchdLbl.setPreferredSize(new Dimension(850, 80));
 			tempSchdLbl.setHorizontalAlignment(JLabel.LEFT);
 			tempSchdLbl.setFont(new Font(tempSchdLbl.getFont().getName(), Font.PLAIN, 25));
 			tempSchdLbl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 			tempSchdPnl.add(tempSchdLbl);
-			
+
 			JButton modBtn = new JButton("수정");
 			modBtn.setFont(new Font(modBtn.getFont().getName(), Font.PLAIN, 20));
 			modBtn.setPreferredSize(new Dimension(80, 80));
@@ -148,45 +151,45 @@ public class PlaneScheModDialog extends JDialog {
 			modBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					int i = 0;
-					for (; i < modBtnList.size(); i++) {
-						if (modBtnList.get(i).equals((JButton) e.getSource())){
-							break;
-						}
+					int i = modBtnList.indexOf((JButton) e.getSource());
+					if (countSeatReserves[0] != 0 || countSeatReserves[1] != 0 || countSeatReserves[2] != 0) {
+						JOptionPane.showMessageDialog(null, "예약이 있어 수정이 불가합니다", "수정 불가", JOptionPane.ERROR_MESSAGE);
+						return;
 					}
 					new PlaneScheAddDialog(plane, i);
 				}
 			});
-			
+
 			JButton delBtn = new JButton("삭제");
 			delBtn.setFont(new Font(delBtn.getFont().getName(), Font.PLAIN, 20));
 			delBtn.setPreferredSize(new Dimension(80, 80));
 			tempSchdPnl.add(delBtn);
 			delBtnList.add(delBtn);
-			
+
 			delBtn.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					JButton clickedBtn = (JButton) e.getSource();
-					for (int j = 0; j < delBtnList.size(); j++) {
-						if (delBtnList.get(j).equals(clickedBtn)) {
-							int choice = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?\n복구할 수 없습니다", "삭제 확인",
-									JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-							if (choice == 0) {
-								plane.schedules.remove(j);
-								planeSchedPnl.remove(j);
-								planeSchedPnl.repaint();
-								planeSchedPnl.revalidate();
-							}
-						}
+					int j = delBtnList.indexOf(clickedBtn);
+					if (countSeatReserves[0] != 0 || countSeatReserves[1] != 0 || countSeatReserves[2] != 0) {
+						JOptionPane.showMessageDialog(null, "예약이 있어 수정이 불가합니다", "수정 불가", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					int choice = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?\n복구할 수 없습니다", "삭제 확인",
+							JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+					if (choice == 0) {
+						plane.schedules.remove(j);
+						planeSchedPnl.remove(j);
+						planeSchedPnl.repaint();
+						planeSchedPnl.revalidate();
 					}
 				}
 			});
-			
+
 			planeSchedPnl.add(tempSchdPnl);
 		}
 	}
-	
+
 	class mySchdAddActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {

@@ -6,9 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class PlaneScheAddDialog extends JDialog {
-	String[] airportPlaceDept = { "선택", "서울", "대구", "울산", "부산", "제주" };
-	String[] airportPlaceArrv = { "선택", "서울", "대구", "울산", "부산", "제주" };
-	String[] deptTimeList = { "선택", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00" };
+	static String[] airportPlaceDept = { "선택", "서울", "대구", "부산", "제주" };
+	static String[] airportPlaceArrv = { "선택", "서울", "대구", "부산", "제주" };
+	static String[] deptTimeList = { "선택", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00" };
 
 	public PlaneScheAddDialog(Plane plane, int selectedBtn) {
 		JPanel mainPnl = new JPanel();
@@ -77,8 +77,7 @@ public class PlaneScheAddDialog extends JDialog {
 		deptPlaceComb.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> tempComb = (JComboBox<String>) e.getSource();
-				int selectedIdx = tempComb.getSelectedIndex();
+				int selectedIdx = deptPlaceComb.getSelectedIndex();
 				arrvPlaceComb.removeAllItems();
 				for (int i = 0; i < airportPlaceArrv.length; i++) {
 					if (selectedIdx == 0) {
