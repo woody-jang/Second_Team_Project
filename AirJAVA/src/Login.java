@@ -389,6 +389,7 @@ public class Login extends JDialog {
 					JOptionPane.showMessageDialog(null, inputNameTf.getText() + " 님 가입을 환영합니다!\n1000 java가 적립되었습니다");
 					Main.customers.add(temp);
 					CustomerIO.save(Main.customers);
+					Main.main.addCustomerManPnl();
 					
 					inputNameTf.setText("");
 					inputBirthTf.setText("주민번호 앞자리");

@@ -133,11 +133,11 @@ public class PlaneAddDialog extends JDialog {
 		mainPnl.add(comboPnl);
 
 		JPanel seatPosPnl = new JPanel();
-		seatPos1 = new JPanel();
+		seatPos1 = new JPanel(); // 1구역 패널
 		seatPos1.setLayout(new BoxLayout(seatPos1, BoxLayout.Y_AXIS));
-		seatPos2 = new JPanel();
+		seatPos2 = new JPanel(); // 2구역 패널
 		seatPos2.setLayout(new BoxLayout(seatPos2, BoxLayout.Y_AXIS));
-		seatPos3 = new JPanel();
+		seatPos3 = new JPanel(); // 3구역 패널
 		seatPos3.setLayout(new BoxLayout(seatPos3, BoxLayout.Y_AXIS));
 
 		seatPos1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "1구역",
@@ -154,7 +154,7 @@ public class PlaneAddDialog extends JDialog {
 		seatPosPnl.add(seatPos3);
 		mainPnl.add(seatPosPnl);
 
-		setSeatPosPnl();
+		setSeatPosPnl(); // 기존 비행기를 수정하는 경우 시트를 그려놓기 위한 메소드
 
 		JPanel okCanBtnPnl = new JPanel();
 		JButton okBtn = new JButton("확인");
@@ -203,29 +203,29 @@ public class PlaneAddDialog extends JDialog {
 
 	private void setSeatPosPnl() {
 		for (int i = 0; i < 3; i++) {
-			if (tempPla.seatV[i] != null) {
+			if (tempPla.seatV[i] != null) { // 1구역부터 3구역까지 확인하면서
 				setSeatPosLbl(tempPla.seatV[i], "V", i);
-			} else if (tempPla.seatG[i] != null) {
+			} else if (tempPla.seatG[i] != null) { // V, G, S 중에 좌석이 이미 있다면
 				setSeatPosLbl(tempPla.seatG[i], "G", i);
-			} else if (tempPla.seatS[i] != null) {
+			} else if (tempPla.seatS[i] != null) { // 아래에 있는 메소드를 실행해서 좌석 배치
 				setSeatPosLbl(tempPla.seatS[i], "S", i);
 			}
 		}
 	}
 
 	private void setSeatPosLbl(List<JButton> seat, String seatGrade, int idx) {
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 2; i++) { // 좌석배치에서 윗열, 아랫열 2개의 패널로 구성됨
 			JPanel tempPnl = new JPanel();
-			for (int j = 0; j < seat.size() / 2; j++) {
-				int temp = (i * 2) + (j * 2) + 1;
+			for (int j = 0; j < seat.size() / 2; j++) { // 윗열 아랫열로 나누어져서 반복횟수는 시트갯수 / 2
+				int temp = (i * 2) + (j * 2) + 1; // 좌석 번호를 저장할 임시 변수
 				JLabel tempLbl1 = new JLabel(seatGrade + " 0" + temp);
 				tempLbl1.setPreferredSize(new Dimension(40, 50));
 				tempLbl1.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 				tempLbl1.setHorizontalAlignment(JLabel.CENTER);
-				tempPnl.add(tempLbl1);
+				tempPnl.add(tempLbl1); // 패널에 윗열의 좌석을 추가함
 			}
 			if (idx == 0)
-				seatPos1.add(tempPnl);
+				seatPos1.add(tempPnl); // 1구역이라면 1구역 패널에 추가
 			else if (idx == 1)
 				seatPos2.add(tempPnl);
 			else if (idx == 2)
@@ -447,8 +447,8 @@ public class PlaneAddDialog extends JDialog {
 				planeName4.setText(String.valueOf(getCountOfSeat(tempPla.seatG)));
 				planeName5.setText(String.valueOf(getCountOfSeat(tempPla.seatS)));
 			}
-			repaint();
 			revalidate();
+			repaint();
 		}
 	}
 }

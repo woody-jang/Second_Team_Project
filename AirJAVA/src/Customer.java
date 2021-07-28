@@ -13,8 +13,8 @@ public class Customer implements Serializable {
 	private int point; // 포인트
 	private int star; // 스티커 0 ~ 12
 	private List<UserSchedule> schedules; // 예약했던 목록
-	private int[] encryption;
-	private boolean[] encryptionCode;
+	private int[] encryption; // 비밀번호 파일로 저장시 암호화를 위한 배열
+	private boolean[] encryptionCode; // 비밀번호 암호화시 부호를 저장하기 위한 배열 (복호화용)
 
 	public Customer(String name, String birth, String cellNum, String uid, char[] upwd) {
 		this.name = name;
@@ -100,12 +100,12 @@ public class Customer implements Serializable {
 		this.schedules = schedules;
 	}
 
-	public void setPassword() {
+	public void setPassword() { // 비밀번호 암호화 작업
 		encryption = new int[upwd.length];
 		encryptionCode = new boolean[upwd.length];
 		for (int i = 0; i < upwd.length; i++) {
-			int n = (int) (Math.random() * 100) % 68 + 1;
-			if (upwd[i] > 100) {
+			int n = (int) (Math.random() * 100) % 63 + 1;
+			if (upwd[i] > 63) {
 				upwd[i] = (char) (upwd[i] - n);
 				encryptionCode[i] = true;
 			} else {
@@ -116,7 +116,7 @@ public class Customer implements Serializable {
 		}
 	}
 
-	public void getPassword() {
+	public void getPassword() { // 비밀번호 복호화 작업
 		for (int i = 0; i < encryption.length; i++) {
 			if (encryptionCode[i])
 				upwd[i] = (char) (upwd[i] + encryption[i]);

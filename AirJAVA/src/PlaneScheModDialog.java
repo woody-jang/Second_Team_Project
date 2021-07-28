@@ -180,8 +180,9 @@ public class PlaneScheModDialog extends JDialog {
 					if (choice == 0) {
 						plane.schedules.remove(j);
 						planeSchedPnl.remove(j);
-						planeSchedPnl.repaint();
 						planeSchedPnl.revalidate();
+						planeSchedPnl.repaint();
+						pack();
 					}
 				}
 			});
@@ -196,8 +197,8 @@ public class PlaneScheModDialog extends JDialog {
 			new PlaneScheAddDialog(plane, -1);
 			planeSchedPnl.removeAll();
 			addPlaSchds();
-			repaint();
 			revalidate();
+			repaint();
 			pack();
 		}
 	}

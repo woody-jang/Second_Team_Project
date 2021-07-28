@@ -187,8 +187,8 @@ public class Calendar extends JDialog {
 			}
 		}
 		nowMonthLbl.setText(" " + today.getYear() + "." + today.getMonthValue() + " ");
-		repaint();
 		revalidate();
+		repaint();
 		pack();
 	}
 
@@ -333,8 +333,8 @@ public class Calendar extends JDialog {
 		calPnl.add(addDayLbl());
 		((JPanel) mainPnl.getComponent(2)).remove(2);
 		((JPanel) mainPnl.getComponent(2)).remove(0);
-		repaint();
 		revalidate();
+		repaint();
 		return mainPnl;
 	}
 }

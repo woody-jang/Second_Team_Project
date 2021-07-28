@@ -9,13 +9,24 @@ import javax.swing.*;
 
 public class DayScheAddDialog extends JDialog {
 	String selectedDate = "";
-	public DayScheAddDialog(int year, int month, int day) {
+	public DayScheAddDialog(int year, int month, int day, PlaneSchedule schedule) {
 		selectedDate = year + "." + month + "." + day;
 		String[] planeNames = new String[Main.planes.size() + 1];
 		planeNames[0] = "선택";
 		for (int i = 0; i < Main.planes.size(); i++) {
 			planeNames[i + 1] = Main.planes.get(i).planeName;
 		}
+		
+		int idx = 0;
+		for (int i = 0; i < Main.planes.size(); i++) {
+			for (int j = 0; j < Main.planes.get(i).schedules.size(); j++) {
+				if (Main.planes.get(i).schedules.get(j).equals(schedule)) {
+					idx = i;
+					break;
+				}
+			}
+		}
+		
 		JPanel mainPnl = new JPanel();
 		mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
 
@@ -69,6 +80,19 @@ public class DayScheAddDialog extends JDialog {
 		mainPnl.add(btnPnl);
 
 		add(mainPnl);
+		
+		if (schedule != null) {
+			planeNameComb.setSelectedItem(Main.planes.get(idx).planeName);
+			deptPlaceComb.setSelectedItem(schedule.deptPlace);
+			deptTimeComb.setSelectedItem(schedule.deptTime);
+			arrvPlaceComb.removeAllItems();
+			for (int i = 0; i < PlaneScheAddDialog.airportPlaceArrv.length; i++) {
+				if (!PlaneScheAddDialog.airportPlaceArrv[i].equals(schedule.deptPlace)) {
+					arrvPlaceComb.addItem(PlaneScheAddDialog.airportPlaceArrv[i]);
+				}
+			}
+			arrvPlaceComb.setSelectedItem(schedule.arrvPlace);
+		}
 
 		deptPlaceComb.addActionListener(new ActionListener() {
 			@Override
@@ -92,19 +116,25 @@ public class DayScheAddDialog extends JDialog {
 				String deptPlace = (String) deptPlaceComb.getSelectedItem();
 				String arrvPlace = (String) arrvPlaceComb.getSelectedItem();
 				String deptTime = (String) deptTimeComb.getSelectedItem();
+				boolean schdChk = false;
 				List<PlaneSchedule> schedules = new ArrayList<PlaneSchedule>();
 				int idx = 0;
-				for (; idx < Main.planes.size(); idx++) {
-					if (Main.planes.get(idx).planeName.equals(plane)) {
-						schedules = Main.planes.get(idx).schedules;
-						break;
+				if (schedule != null) {
+					schedule.deptPlace = deptPlace;
+					schedule.arrvPlace = arrvPlace;
+					schedule.deptTime = deptTime;
+				} else {
+					for (; idx < Main.planes.size(); idx++) {
+						if (Main.planes.get(idx).planeName.equals(plane)) {
+							schedules = Main.planes.get(idx).schedules;
+							break;
+						}
 					}
-				}
-				boolean schdChk = false;
-				if (schedules.size() != 0) {
-					for (int i = 0; i < schedules.size(); i++) {
-						if (schedules.get(i).deptDate.equals(selectedDate) && schedules.get(i).deptTime.equals(deptTime)) {
-							schdChk = true;
+					if (schedules.size() != 0) {
+						for (int i = 0; i < schedules.size(); i++) {
+							if (schedules.get(i).deptDate.equals(selectedDate) && schedules.get(i).deptTime.equals(deptTime)) {
+								schdChk = true;
+							}
 						}
 					}
 				}

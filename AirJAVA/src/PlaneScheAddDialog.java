@@ -19,11 +19,7 @@ public class PlaneScheAddDialog extends JDialog {
 		scheDateLbl.setFont(new Font(scheDateLbl.getFont().getName(), Font.PLAIN, 20));
 		informPnl.add(scheDateLbl);
 
-		String scheDateBtnStr = "미정";
-		if (selectedBtn != -1) {
-			scheDateBtnStr = plane.schedules.get(selectedBtn).deptDate;
-		}
-		JButton scheDateBtn = new JButton(scheDateBtnStr);
+		JButton scheDateBtn = new JButton("미정");
 		scheDateBtn.setFont(new Font(scheDateLbl.getFont().getName(), Font.PLAIN, 20));
 		scheDateBtn.setPreferredSize(new Dimension(120, 30));
 		informPnl.add(scheDateBtn);
@@ -73,6 +69,19 @@ public class PlaneScheAddDialog extends JDialog {
 		cancelBtn.setPreferredSize(new Dimension(100, 30));
 		btnPnl.add(blankLbl);
 		btnPnl.add(cancelBtn);
+		
+		if (selectedBtn != -1) {
+			scheDateBtn.setText(plane.schedules.get(selectedBtn).deptDate);
+			deptPlaceComb.setSelectedItem(plane.schedules.get(selectedBtn).deptPlace);
+			arrvPlaceComb.removeAllItems();
+			for (int i = 0; i < airportPlaceArrv.length; i++) {
+				if (!plane.schedules.get(selectedBtn).deptPlace.equals(airportPlaceArrv[i])) {
+					arrvPlaceComb.addItem(airportPlaceArrv[i]);
+				}
+			}
+			arrvPlaceComb.setSelectedItem(plane.schedules.get(selectedBtn).arrvPlace);
+			deptTimeComb.setSelectedItem(plane.schedules.get(selectedBtn).deptTime);
+		}
 		
 		deptPlaceComb.addActionListener(new ActionListener() {
 			@Override
