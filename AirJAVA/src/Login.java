@@ -487,6 +487,8 @@ public class Login extends JDialog {
 				ImageIcon logoLblIcon = new ImageIcon(logoLblImage);
 				if (checkId && checkPwd) {
 					JOptionPane.showMessageDialog(null, tempCustomer.getName() + " 님 어서오세요\nWelcome " + tempCustomer.getName() + " :D", "Welcome :D", JOptionPane.INFORMATION_MESSAGE,logoLblIcon);
+					Main.checkAdmin = 0;
+					Main.loginId = loginId;
 					if (loginId.equals("admin"))
 						Main.checkAdmin = 1;
 					dispose();

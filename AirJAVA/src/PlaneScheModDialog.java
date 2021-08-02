@@ -112,21 +112,21 @@ public class PlaneScheModDialog extends JDialog {
 			String deptTime = tempPlaSchd.deptTime;
 			countSeatReserves = new int[3];
 			for (int j = 0; j < 3; j++) {
-				if (tempPlaSchd.getSeatSelectedV[i] != null) {
-					for (int k = 0; k < tempPlaSchd.getSeatSelectedV[i].size(); k++) {
-						if (!tempPlaSchd.getSeatSelectedV[i].get(k))
+				if (tempPlaSchd.getSeatSelectedV[j] != null) {
+					for (int k = 0; k < tempPlaSchd.getSeatSelectedV[j].size(); k++) {
+						if (!tempPlaSchd.getSeatSelectedV[j].get(k))
 							countSeatReserves[0]++;
 					}
 				}
-				if (tempPlaSchd.getSeatSelectedG[i] != null) {
-					for (int k = 0; k < tempPlaSchd.getSeatSelectedG[i].size(); k++) {
-						if (!tempPlaSchd.getSeatSelectedG[i].get(k))
+				if (tempPlaSchd.getSeatSelectedG[j] != null) {
+					for (int k = 0; k < tempPlaSchd.getSeatSelectedG[j].size(); k++) {
+						if (!tempPlaSchd.getSeatSelectedG[j].get(k))
 							countSeatReserves[1]++;
 					}
 				}
-				if (tempPlaSchd.getSeatSelectedS[i] != null) {
-					for (int k = 0; k < tempPlaSchd.getSeatSelectedS[i].size(); k++) {
-						if (!tempPlaSchd.getSeatSelectedS[i].get(k))
+				if (tempPlaSchd.getSeatSelectedS[j] != null) {
+					for (int k = 0; k < tempPlaSchd.getSeatSelectedS[j].size(); k++) {
+						if (!tempPlaSchd.getSeatSelectedS[j].get(k))
 							countSeatReserves[2]++;
 					}
 				}

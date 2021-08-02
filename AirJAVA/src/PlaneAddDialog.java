@@ -217,7 +217,7 @@ public class PlaneAddDialog extends JDialog {
 		for (int i = 0; i < 2; i++) { // 좌석배치에서 윗열, 아랫열 2개의 패널로 구성됨
 			JPanel tempPnl = new JPanel();
 			for (int j = 0; j < seat.size() / 2; j++) { // 윗열 아랫열로 나누어져서 반복횟수는 시트갯수 / 2
-				int temp = (i * 2) + (j * 2) + 1; // 좌석 번호를 저장할 임시 변수
+				int temp = (i * 1) + (j * 2) + 1; // 좌석 번호를 저장할 임시 변수
 				JLabel tempLbl1 = new JLabel(seatGrade + " 0" + temp);
 				tempLbl1.setPreferredSize(new Dimension(40, 50));
 				tempLbl1.setBorder(BorderFactory.createLineBorder(Color.black, 1));
