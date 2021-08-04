@@ -12,7 +12,7 @@ public class Customer implements Serializable {
 	private int grade; // 등급, 0:실버, 1:골드, 2:다이아
 	private int point; // 포인트
 	private int star; // 스티커 0 ~ 12
-	private List<UserSchedule> schedules; // 예약했던 목록
+	private List<UserSchedule> schedules = new ArrayList<UserSchedule>(); // 예약했던 목록
 	private int[] encryption; // 비밀번호 파일로 저장시 암호화를 위한 배열
 	private boolean[] encryptionCode; // 비밀번호 암호화시 부호를 저장하기 위한 배열 (복호화용)
 
@@ -25,7 +25,6 @@ public class Customer implements Serializable {
 		this.grade = 0;
 		this.point = 1000;
 		this.star = 0;
-		this.schedules = new ArrayList<UserSchedule>();
 	}
 
 	public String getName() {

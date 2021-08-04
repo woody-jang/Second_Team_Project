@@ -135,6 +135,7 @@ public class Main extends JFrame {
 	}
 
 	private void addCusSelectSeatPnl(String[] inform) {
+		cusSelectSeatPnl.removeAll();
 		JTabbedPane cusSelectSeatTab = new JTabbedPane();
 
 		JPanel deptSelectSeatPnl = new JPanel();
@@ -209,22 +210,22 @@ public class Main extends JFrame {
 			JPanel seatArrvPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JPanel seat1ArrvPnl = new JPanel();
 			seat1ArrvPnl.setLayout(new BoxLayout(seat1ArrvPnl, BoxLayout.Y_AXIS));
-			seat1ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "1구역",
-					TitledBorder.CENTER, TitledBorder.TOP));
+			seat1ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2),
+					"1구역", TitledBorder.CENTER, TitledBorder.TOP));
 			seat1ArrvPnl.setPreferredSize(new Dimension(230, 300));
 			seatArrvPnl.add(seat1ArrvPnl);
 
 			JPanel seat2ArrvPnl = new JPanel();
 			seat2ArrvPnl.setLayout(new BoxLayout(seat2ArrvPnl, BoxLayout.Y_AXIS));
-			seat2ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "2구역",
-					TitledBorder.CENTER, TitledBorder.TOP));
+			seat2ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2),
+					"2구역", TitledBorder.CENTER, TitledBorder.TOP));
 			seat2ArrvPnl.setPreferredSize(new Dimension(230, 300));
 			seatArrvPnl.add(seat2ArrvPnl);
 
 			JPanel seat3ArrvPnl = new JPanel();
 			seat3ArrvPnl.setLayout(new BoxLayout(seat3ArrvPnl, BoxLayout.Y_AXIS));
-			seat3ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2), "3구역",
-					TitledBorder.CENTER, TitledBorder.TOP));
+			seat3ArrvPnl.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black, 2),
+					"3구역", TitledBorder.CENTER, TitledBorder.TOP));
 			seat3ArrvPnl.setPreferredSize(new Dimension(230, 300));
 			seatArrvPnl.add(seat3ArrvPnl);
 			addSeatPnl(new JPanel[] { seat1ArrvPnl, seat2ArrvPnl, seat3ArrvPnl }, 1);
@@ -234,7 +235,7 @@ public class Main extends JFrame {
 		}
 
 		this.cusSelectSeatPnl.add(cusSelectSeatTab);
-		
+
 		addPaymentPnl(inform);
 	}
 
@@ -243,27 +244,27 @@ public class Main extends JFrame {
 //		JScrollPane scrlPaymentPnl = new JScrollPane(paymentPnl);
 		paymentPnl.setLayout(new BoxLayout(paymentPnl, BoxLayout.Y_AXIS));
 		paymentPnl.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		
+
 		JPanel person1Pnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel person1Lbl = new JLabel("탑승자 1");
 		person1Lbl.setFont(new Font(person1Lbl.getFont().getName(), Font.PLAIN, 20));
 		person1Pnl.add(person1Lbl);
 		paymentPnl.add(person1Pnl);
-		
+
 		JPanel person1DeptPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel person1DeptLbl = new JLabel("가는편 좌석");
 		person1DeptLbl.setFont(new Font(person1DeptLbl.getFont().getName(), Font.PLAIN, 20));
 		person1DeptPnl.add(person1DeptLbl);
-		
+
 		person1DeptSelLbl = new JLabel("미정");
 		person1DeptSelLbl.setPreferredSize(new DimensionUIResource(150, 30));
 		person1DeptSelLbl.setHorizontalAlignment(JLabel.CENTER);
 		person1DeptSelLbl.setFont(new Font(person1DeptLbl.getFont().getName(), Font.PLAIN, 20));
 		person1DeptSelLbl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		person1DeptPnl.add(person1DeptSelLbl);
-		
+
 		paymentPnl.add(person1DeptPnl);
-		
+
 		if (!oneWayChk) {
 			JPanel person1ArrvPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel person1ArrvLbl = new JLabel("오는편 좌석");
@@ -275,32 +276,32 @@ public class Main extends JFrame {
 			person1ArrvSelLbl.setFont(new Font(person1DeptLbl.getFont().getName(), Font.PLAIN, 20));
 			person1ArrvSelLbl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			person1ArrvPnl.add(person1ArrvSelLbl);
-			
+
 			paymentPnl.add(person1ArrvPnl);
-			
+
 		}
-		
+
 		if (inform[4].equals("2")) {
 			JPanel person2Pnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel person2Lbl = new JLabel("탑승자 2");
 			person2Lbl.setFont(new Font(person2Lbl.getFont().getName(), Font.PLAIN, 20));
 			person2Pnl.add(person2Lbl);
 			paymentPnl.add(person2Pnl);
-			
+
 			JPanel person2DeptPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			JLabel person2DeptLbl = new JLabel("가는편 좌석");
 			person2DeptLbl.setFont(new Font(person2DeptLbl.getFont().getName(), Font.PLAIN, 20));
 			person2DeptPnl.add(person2DeptLbl);
-			
+
 			person2DeptSelLbl = new JLabel("미정");
 			person2DeptSelLbl.setPreferredSize(new DimensionUIResource(150, 30));
 			person2DeptSelLbl.setHorizontalAlignment(JLabel.CENTER);
 			person2DeptSelLbl.setFont(new Font(person2DeptLbl.getFont().getName(), Font.PLAIN, 20));
 			person2DeptSelLbl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 			person2DeptPnl.add(person2DeptSelLbl);
-			
+
 			paymentPnl.add(person2DeptPnl);
-			
+
 			if (!oneWayChk) {
 				JPanel person2ArrvPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 				JLabel person2ArrvLbl = new JLabel("오는편 좌석");
@@ -312,24 +313,24 @@ public class Main extends JFrame {
 				person2ArrvSelLbl.setFont(new Font(person2DeptLbl.getFont().getName(), Font.PLAIN, 20));
 				person2ArrvSelLbl.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 				person2ArrvPnl.add(person2ArrvSelLbl);
-				
+
 				paymentPnl.add(person2ArrvPnl);
-				
+
 			}
 		}
-		
+
 		JPanel payInformLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel payInformLbl = new JLabel("결제 금액");
 		payInformLbl.setFont(new Font(payInformLbl.getFont().getName(), Font.PLAIN, 20));
 		payInformLblPnl.add(payInformLbl);
 		paymentPnl.add(payInformLblPnl);
-		
+
 		JPanel payPriceLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		payPriceLbl = new JLabel("총 0원");
 		payPriceLbl.setFont(new Font(payPriceLbl.getFont().getName(), Font.PLAIN, 20));
 		payInformLblPnl.add(payPriceLbl);
 		paymentPnl.add(payPriceLblPnl);
-		
+
 		JPanel mileageLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel mileageLbl = new JLabel("마일리지 사용");
 		mileageLbl.setFont(new Font(mileageLbl.getFont().getName(), Font.PLAIN, 20));
@@ -338,28 +339,17 @@ public class Main extends JFrame {
 		mileageLblPnl.add(mileageLbl);
 		mileageLblPnl.add(mileageBtn);
 		paymentPnl.add(mileageLblPnl);
-		
+
 		JPanel mileageUseLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		// 여기에 로그인사람의 정보를 불러와서 포인트를 넣어야함
 		JLabel mileageUseLbl = new JLabel();
 		mileageUseLbl.setFont(new Font(mileageUseLbl.getFont().getName(), Font.PLAIN, 20));
 		mileageUseLblPnl.add(mileageUseLbl);
 		paymentPnl.add(mileageUseLblPnl);
-		
-		mileageBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (Customer cus : customers) {
-					if (cus.getUid().equals(loginId)) {
-						mileageUseLbl.setText(cus.getPoint() + "java 사용가능");
-						loginCustomer = cus;
-					}
-				}
-			}
-		});
-		
+
 		JPanel mileageUseTfPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JTextField mileageUseTf = new JTextField(5);
+		mileageUseTf.setEnabled(false);
 		mileageUseTf.setText("0");
 		mileageUseTf.setFont(new Font(mileageUseTf.getFont().getName(), Font.PLAIN, 20));
 		mileageUseTfPnl.add(mileageUseTf);
@@ -367,13 +357,26 @@ public class Main extends JFrame {
 		mileageUseBtn.setFont(new Font(mileageUseBtn.getFont().getName(), Font.PLAIN, 20));
 		mileageUseTfPnl.add(mileageUseBtn);
 		paymentPnl.add(mileageUseTfPnl);
-		
+
+		mileageBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (Customer cus : customers) {
+					if (cus.getUid().equals(loginId)) {
+						mileageUseLbl.setText(cus.getPoint() + "java 사용가능");
+						loginCustomer = cus;
+						mileageUseTf.setEnabled(true);
+					}
+				}
+			}
+		});
+
 		JPanel totalPayLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel totalPayLbl = new JLabel("최종 결제 금액");
 		totalPayLbl.setFont(new Font(totalPayLbl.getFont().getName(), Font.PLAIN, 20));
 		totalPayLblPnl.add(totalPayLbl);
 		paymentPnl.add(totalPayLblPnl);
-		
+
 		JPanel totalPriceLblPnl = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		totalPriceLbl = new JLabel("총 0원");
 		totalPriceLbl.setFont(new Font(totalPriceLbl.getFont().getName(), Font.PLAIN, 20));
@@ -382,7 +385,7 @@ public class Main extends JFrame {
 		finalPayBtn.setFont(new Font(finalPayBtn.getFont().getName(), Font.PLAIN, 20));
 		totalPriceLblPnl.add(finalPayBtn);
 		paymentPnl.add(totalPriceLblPnl);
-		
+
 		mileageUseBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -404,23 +407,165 @@ public class Main extends JFrame {
 				totalPriceLbl.setText("총 " + (price - Integer.parseInt(mileageUseTf.getText()) + "원"));
 			}
 		});
-		
+
+		finalPayBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String person1DeptSeat = person1DeptSelLbl.getText();
+				String person1ArrvSeat = null;
+				String person2DeptSeat = null;
+				String person2ArrvSeat = null;
+				List<UserSchedule> uscheList = null;
+				if (loginCustomer.getSchedules() == null) {
+					uscheList = new ArrayList<UserSchedule>();
+					loginCustomer.setSchedules(uscheList);
+				} else {
+					uscheList = loginCustomer.getSchedules();
+				}
+				UserSchedule deptUsche = new UserSchedule();
+				UserSchedule arrvUsche = null;
+				if (person1DeptSeat.equals("미정")) {
+					JOptionPane.showMessageDialog(null, "좌석을 선택하세요");
+					return;
+				}
+				String deptPlaneNo = deptPlane.planeName;
+				deptUsche.planeNo = deptPlaneNo;
+				String deptDeptPlace = deptPlaneSched.deptPlace;
+				deptUsche.deptPlace = deptDeptPlace;
+				String deptArrvPlace = deptPlaneSched.arrvPlace;
+				deptUsche.arrvPlace = deptArrvPlace;
+				String detpDeptTime = deptPlaneSched.deptTime;
+				deptUsche.deptTime = detpDeptTime;
+				String detpDeptDate = deptPlaneSched.deptDate;
+				deptUsche.deptDate = detpDeptDate;
+				deptUsche.selectedSeat.add(person1DeptSeat);
+				uscheList.add(deptUsche);
+				if (!oneWayChk) {
+					person1ArrvSeat = person1ArrvSelLbl.getText();
+					if (person1ArrvSeat.equals("미정")) {
+						JOptionPane.showMessageDialog(null, "좌석을 선택하세요");
+						return;
+					}
+					arrvUsche = new UserSchedule();
+					String arrvPlaneNo = arrvPlane.planeName;
+					arrvUsche.planeNo = arrvPlaneNo;
+					String arrvDeptPlace = arrvPlaneSched.deptPlace;
+					arrvUsche.deptPlace = arrvDeptPlace;
+					String arrvArrvPlace = arrvPlaneSched.arrvPlace;
+					arrvUsche.arrvPlace = arrvArrvPlace;
+					String arrvDeptTime = arrvPlaneSched.deptTime;
+					arrvUsche.deptTime = arrvDeptTime;
+					String arrvDeptDate = arrvPlaneSched.deptDate;
+					arrvUsche.deptDate = arrvDeptDate;
+					arrvUsche.selectedSeat.add(person1ArrvSeat);
+					uscheList.add(arrvUsche);
+				}
+				if (inform[4].equals("2")) {
+					person2DeptSeat = person2DeptSelLbl.getText();
+					if (person2DeptSeat.equals("미정")) {
+						JOptionPane.showMessageDialog(null, "좌석을 선택하세요");
+						return;
+					}
+					deptUsche.selectedSeat.add(person2DeptSeat);
+					if (!oneWayChk) {
+						person2ArrvSeat = person2ArrvSelLbl.getText();
+						if (person2ArrvSeat.equals("미정")) {
+							JOptionPane.showMessageDialog(null, "좌석을 선택하세요");
+							return;
+						}
+						arrvUsche.selectedSeat.add(person2ArrvSeat);
+					}
+				}
+				for (int i = 0; i < 3; i++) {
+					if (deptPlaneSched.seatV[i] != null) {
+						if (deptPlaneSched.getSeatSelectedV[i] == null) {
+							deptPlaneSched.getSeatSelectedV[i] = new ArrayList<Boolean>();
+						}
+						for (int j = 0; j < deptPlaneSched.seatV[i].size(); j++) {
+							deptPlaneSched.getSeatSelectedV[i].add(false);
+						}
+					} else if (deptPlaneSched.seatG[i] != null) {
+						if (deptPlaneSched.getSeatSelectedG[i] == null) {
+							deptPlaneSched.getSeatSelectedG[i] = new ArrayList<Boolean>();
+						}
+						for (int j = 0; j < deptPlaneSched.seatG[i].size(); j++) {
+							deptPlaneSched.getSeatSelectedG[i].add(false);
+						}
+					} else if (deptPlaneSched.seatS[i] != null) {
+						if (deptPlaneSched.getSeatSelectedS[i] == null) {
+							deptPlaneSched.getSeatSelectedS[i] = new ArrayList<Boolean>();
+						}
+						for (int j = 0; j < deptPlaneSched.seatS[i].size(); j++) {
+							deptPlaneSched.getSeatSelectedS[i].add(false);
+						}
+					}
+				}
+				int section = Integer.parseInt(person1DeptSeat.substring(0, 1)) - 1;
+				String seatGrade = person1DeptSeat.substring(6, 7);
+				int seatNo = Integer.parseInt(person1DeptSeat.substring(8));
+				if (seatGrade.equals("V")) {
+					deptPlaneSched.getSeatSelectedV[section].set(seatNo - 1, true);
+				} else if (seatGrade.equals("G")) {
+					deptPlaneSched.getSeatSelectedG[section].set(seatNo - 1, true);
+				} else if (seatGrade.equals("S")) {
+					deptPlaneSched.getSeatSelectedS[section].set(seatNo - 1, true);
+				}
+				if (person1ArrvSeat != null) {
+					section = Integer.parseInt(person1ArrvSeat.substring(0, 1)) - 1;
+					seatGrade = person1ArrvSeat.substring(6, 7);
+					seatNo = Integer.parseInt(person1ArrvSeat.substring(8));
+					if (seatGrade.equals("V")) {
+						arrvPlaneSched.getSeatSelectedV[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("G")) {
+						arrvPlaneSched.getSeatSelectedG[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("S")) {
+						arrvPlaneSched.getSeatSelectedS[section].set(seatNo - 1, true);
+					}
+				}
+				if (person2DeptSeat != null) {
+					section = Integer.parseInt(person2DeptSeat.substring(0, 1)) - 1;
+					seatGrade = person2DeptSeat.substring(6, 7);
+					seatNo = Integer.parseInt(person2DeptSeat.substring(8));
+					if (seatGrade.equals("V")) {
+						deptPlaneSched.getSeatSelectedV[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("G")) {
+						deptPlaneSched.getSeatSelectedG[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("S")) {
+						deptPlaneSched.getSeatSelectedS[section].set(seatNo - 1, true);
+					}
+				}
+				if (person2ArrvSeat != null) {
+					section = Integer.parseInt(person2ArrvSeat.substring(0, 1)) - 1;
+					seatGrade = person2ArrvSeat.substring(6, 7);
+					seatNo = Integer.parseInt(person2ArrvSeat.substring(8));
+					if (seatGrade.equals("V")) {
+						arrvPlaneSched.getSeatSelectedV[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("G")) {
+						arrvPlaneSched.getSeatSelectedG[section].set(seatNo - 1, true);
+					} else if (seatGrade.equals("S")) {
+						arrvPlaneSched.getSeatSelectedS[section].set(seatNo - 1, true);
+					}
+				}
+				reserveCard.show(reserveCardPnl, "비행기선택");
+			}
+		});
+
 		cusSelectSeatPnl.add(paymentPnl);
 	}
 
 	private void addSeatPnl(JPanel[] jPanels, int type) {
 		for (int i = 0; i < 3; i++) {
 			if (deptPlaneSched.seatV[i] != null) {
-				setSeatPosLbl(jPanels, deptPlaneSched.seatV[i], "V", i, type);
+				setSeatPosLbl(jPanels, deptPlaneSched.seatV[i], deptPlaneSched.getSeatSelectedV[i], i, type);
 			} else if (deptPlaneSched.seatG[i] != null) { // V, G, S 중에 좌석이 이미 있다면
-				setSeatPosLbl(jPanels, deptPlaneSched.seatG[i], "G", i, type);
+				setSeatPosLbl(jPanels, deptPlaneSched.seatG[i], deptPlaneSched.getSeatSelectedG[i], i, type);
 			} else if (deptPlaneSched.seatS[i] != null) { // 아래에 있는 메소드를 실행해서 좌석 배치
-				setSeatPosLbl(jPanels, deptPlaneSched.seatS[i], "S", i, type);
+				setSeatPosLbl(jPanels, deptPlaneSched.seatS[i], deptPlaneSched.getSeatSelectedS[i], i, type);
 			}
 		}
 	}
 
-	private void setSeatPosLbl(JPanel[] jPanels, List<JButton> seat, String seatGrade, int idx, int type) {
+	private void setSeatPosLbl(JPanel[] jPanels, List<JButton> seat, List<Boolean> seatSelected, int idx, int type) {
 		deptSeatButton = new ArrayList<JButton>();
 		arrvSeatButton = new ArrayList<JButton>();
 		for (int i = 0; i < 2; i++) { // 좌석배치에서 윗열, 아랫열 2개의 패널로 구성됨
@@ -428,17 +573,23 @@ public class Main extends JFrame {
 			for (int j = 0; j < seat.size() / 2; j++) { // 윗열 아랫열로 나누어져서 반복횟수는 시트갯수 / 2
 				int temp = (i * 1) + (j * 2) + 1; // 좌석 번호를 저장할 임시 변수
 				JButton tempBtn = new JButton();
-				tempBtn.setText(seatGrade + " 0" + (temp));
+				tempBtn.setText(seat.get(temp - 1).getText());
 				tempBtn.setFont(new Font(tempBtn.getFont().getName(), Font.PLAIN, 20));
 				tempBtn.setMargin(new Insets(0, 0, 0, 0));
 				tempBtn.setPreferredSize(new Dimension(50, 100));
 				tempPnl.add(tempBtn); // 패널에 윗열의 좌석을 추가함
+				int index = Integer.parseInt(tempBtn.getText().substring(2)) - 1;
+				if (seatSelected != null) {
+					if (seatSelected.get(index)) {
+						tempBtn.setEnabled(false);
+					}
+				}
 				if (type == 0) {
 					deptSeatButton.add(tempBtn);
 				} else {
 					arrvSeatButton.add(tempBtn);
 				}
-				
+
 				tempBtn.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -529,7 +680,8 @@ public class Main extends JFrame {
 									totalPriceLbl.setText("총 " + price + "원");
 									return;
 								}
-								if (!person1DeptSelLbl.getText().equals("미정") && person2DeptSelLbl.getText().equals("미정")) {
+								if (!person1DeptSelLbl.getText().equals("미정")
+										&& person2DeptSelLbl.getText().equals("미정")) {
 									person2DeptSelLbl.setText(idx + 1 + "구역 : " + clickedBtn.getText());
 									if (clickedBtn.getText().substring(0, 1).equals("V")) {
 										price += 500000;
@@ -542,7 +694,8 @@ public class Main extends JFrame {
 									totalPriceLbl.setText("총 " + price + "원");
 									return;
 								}
-								if (!person1DeptSelLbl.getText().equals("미정") && !person2DeptSelLbl.getText().equals("미정")) {
+								if (!person1DeptSelLbl.getText().equals("미정")
+										&& !person2DeptSelLbl.getText().equals("미정")) {
 									JOptionPane.showMessageDialog(null, "기존좌석을 취소후 선택하세요");
 									return;
 								}
@@ -583,7 +736,8 @@ public class Main extends JFrame {
 									totalPriceLbl.setText("총 " + price + "원");
 									return;
 								}
-								if (!person1ArrvSelLbl.getText().equals("미정") && person2ArrvSelLbl.getText().equals("미정")) {
+								if (!person1ArrvSelLbl.getText().equals("미정")
+										&& person2ArrvSelLbl.getText().equals("미정")) {
 									person2ArrvSelLbl.setText(idx + 1 + "구역 : " + clickedBtn.getText());
 									if (clickedBtn.getText().substring(0, 1).equals("V")) {
 										price += 500000;
@@ -596,7 +750,8 @@ public class Main extends JFrame {
 									totalPriceLbl.setText("총 " + price + "원");
 									return;
 								}
-								if (!person1ArrvSelLbl.getText().equals("미정") && !person2ArrvSelLbl.getText().equals("미정")) {
+								if (!person1ArrvSelLbl.getText().equals("미정")
+										&& !person2ArrvSelLbl.getText().equals("미정")) {
 									JOptionPane.showMessageDialog(null, "기존좌석을 취소후 선택하세요");
 									return;
 								}
@@ -1044,12 +1199,17 @@ public class Main extends JFrame {
 					checkAdmin = -1;
 					revalidate();
 					repaint();
-				} else if (checkAdmin == 0){
+				} else if (checkAdmin == 0) {
 					card.show(cardPnl, "예약");
 					setSize(1100, 600);
 					checkAdmin = -1;
 					revalidate();
 					repaint();
+					for (Customer cus : customers) {
+						if (cus.getUid().equals(loginId)) {
+							loginCustomer = cus;
+						}
+					}
 				}
 			}
 		});
